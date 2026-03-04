@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>Frye English</title>
+<style>
+:root{
+  --pu:#7c4dff;--pk:#f9257e;--or:#ff6d3a;
+  --og:#00c896;--rd:#ff4466;--ye:#ffd600;
+  --gr:#16a34a;--me:#d97706;--hr:#dc2626;
+  --bg:#f4f2ff;--cd:#fff;--tx:#1a1a2e;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);min-height:100vh;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px)+50px);}
+
+.hdr{
+  background:linear-gradient(160deg,#1a0533 0%,#3d1278 55%,#6d28d9 100%);
+  padding:calc(env(safe-area-inset-top,24px)+28px) 20px 28px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.hdr::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.07) 1.5px,transparent 1.5px);
+  background-size:28px 28px;}
+.o1{position:absolute;width:200px;height:200px;border-radius:50%;top:-60px;right:-40px;
+  background:radial-gradient(circle,rgba(249,37,126,.25),transparent 70%);pointer-events:none;}
+.o2{position:absolute;width:170px;height:170px;border-radius:50%;bottom:-55px;left:-35px;
+  background:radial-gradient(circle,rgba(124,77,255,.3),transparent 70%);pointer-events:none;}
+.brand{position:relative;z-index:1;font-weight:800;
+  font-size:clamp(2rem,9vw,3.2rem);color:#fff;letter-spacing:1px;line-height:1;
+  text-shadow:0 4px 24px rgba(0,0,0,.35);}
+.brand em{font-style:normal;color:var(--ye);}
+.brand-sub{position:relative;z-index:1;color:rgba(255,255,255,.5);font-size:.7rem;
+  font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-top:7px;}
+.chips{position:relative;z-index:1;display:flex;justify-content:center;
+  gap:7px;flex-wrap:wrap;margin-top:14px;}
+.chip{background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.2);
+  color:rgba(255,255,255,.85);font-size:.62rem;font-weight:700;
+  letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:50px;}
+
+.wrap{max-width:580px;margin:0 auto;padding:0 14px;}
+
+.lvc{background:var(--cd);border-radius:0 0 24px 24px;
+  padding:20px 14px 24px;box-shadow:0 8px 28px rgba(0,0,0,.10);margin-bottom:18px;}
+.lvc-t{font-size:.72rem;font-weight:700;color:#bbb;
+  letter-spacing:2.5px;text-transform:uppercase;text-align:center;margin-bottom:12px;}
+.lv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
+.lv-btn{border:2.5px solid transparent;border-radius:15px;padding:14px 4px 12px;
+  font-weight:700;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  -webkit-appearance:none;min-height:78px;position:relative;
+  transition:all .18s;}
+.lv-btn .ic{font-size:1.55rem;line-height:1;}
+.lv-btn .nm{font-size:.95rem;}
+.lv-btn .lb{font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;}
+.lv-btn.easy  {background:#f0fdf4;color:var(--gr);border-color:#bbf7d0;}
+.lv-btn.medium{background:#fffbeb;color:var(--me);border-color:#fde68a;}
+.lv-btn.hard  {background:#fef2f2;color:var(--hr);border-color:#fecaca;}
+.lv-btn.locked{opacity:.35;cursor:not-allowed;filter:grayscale(.5);}
+.lv-btn.sel.easy  {background:var(--gr);color:#fff;border-color:var(--gr);box-shadow:0 6px 16px rgba(22,163,74,.35);}
+.lv-btn.sel.medium{background:var(--me);color:#fff;border-color:var(--me);box-shadow:0 6px 16px rgba(217,119,6,.35);}
+.lv-btn.sel.hard  {background:var(--hr);color:#fff;border-color:var(--hr);box-shadow:0 6px 16px rgba(220,38,38,.35);}
+.lk{position:absolute;top:6px;right:8px;font-size:.72rem;opacity:.5;}
+
+#main{display:none;}
+
+.bn{border-radius:15px;padding:12px 16px;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-weight:700;font-size:.9rem;color:#fff;}
+.bn.easy  {background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 4px 14px rgba(22,163,74,.28);}
+.bn.medium{background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 4px 14px rgba(217,119,6,.28);}
+.bn.hard  {background:linear-gradient(135deg,#dc2626,#ef4444);box-shadow:0 4px 14px rgba(220,38,38,.28);}
+.bn-d{font-size:.66rem;font-weight:600;opacity:.88;}
+
+.pg{background:var(--cd);border-radius:13px;padding:11px 14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px;
+  display:flex;align-items:center;gap:11px;}
+.pg-l{font-weight:700;color:var(--pu);font-size:.7rem;white-space:nowrap;}
+.pg-bg{flex:1;background:#ede8ff;border-radius:50px;height:9px;overflow:hidden;}
+.pg-bar{height:100%;border-radius:50px;
+  background:linear-gradient(90deg,var(--pu),var(--pk));
+  transition:width .45s cubic-bezier(.34,1.56,.64,1);width:0%;}
+.pg-n{font-weight:700;color:var(--pu);font-size:.88rem;white-space:nowrap;}
+
+.slbl{font-weight:700;color:var(--pu);font-size:.72rem;
+  letter-spacing:2px;text-transform:uppercase;margin:0 0 11px 2px;
+  display:flex;align-items:center;gap:8px;}
+.slbl::after{content:'';flex:1;height:2px;
+  background:linear-gradient(90deg,var(--pu),transparent);border-radius:2px;}
+
+.qc{background:var(--cd);border-radius:16px;padding:16px 14px;
+  margin-bottom:11px;box-shadow:0 2px 10px rgba(0,0,0,.08);
+  border-left:4px solid var(--pu);}
+.qc:nth-child(3n+2){border-left-color:var(--pk);}
+.qc:nth-child(3n+3){border-left-color:var(--or);}
+.qc.ok {border-left-color:var(--og)!important;box-shadow:0 3px 14px rgba(0,200,150,.15);}
+.qc.bad{border-left-color:var(--rd)!important;box-shadow:0 3px 14px rgba(255,68,102,.15);}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}50%{transform:translateX(6px)}80%{transform:translateX(-4px)}}
+.qc.shk{animation:shake .32s ease;}
+
+.qh{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.qnum{font-weight:700;font-size:.68rem;letter-spacing:.8px;
+  padding:3px 11px;border-radius:50px;color:#fff;display:inline-block;}
+.qico{font-size:1.2rem;}
+.qtxt{font-size:.96rem;font-weight:600;color:var(--tx);line-height:1.6;margin-bottom:12px;white-space:pre-line;}
+
+.opts{display:flex;flex-direction:column;gap:8px;}
+.opt{display:flex;align-items:center;gap:10px;cursor:pointer;
+  background:#faf8ff;border:2px solid #ede8ff;border-radius:12px;
+  padding:13px 13px;font-size:.93rem;font-weight:600;color:#444;
+  text-align:left;width:100%;
+  -webkit-appearance:none;min-height:52px;}
+.opt.chosen{background:#ede8ff;border-color:var(--pu);color:var(--pu);}
+.opt.chosen .od{background:var(--pu);color:#fff;}
+.opt.grn{background:#dcfce7!important;border-color:var(--og)!important;color:#15803d!important;}
+.opt.grn .od{background:var(--og)!important;color:#fff!important;}
+.opt.red{background:#ffe4e6!important;border-color:var(--rd)!important;color:#be123c!important;}
+.opt.red .od{background:var(--rd)!important;color:#fff!important;}
+.opt:disabled{cursor:default;}
+.od{width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:#ede8ff;color:var(--pu);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:800;}
+
+.frow{display:flex;gap:8px;align-items:stretch;}
+.fi{flex:1;border:2px solid #e5e0ff;border-radius:12px;
+  padding:13px;font-size:16px;font-weight:600;
+  color:var(--tx);outline:none;-webkit-appearance:none;
+  background:#fff;min-height:52px;}
+.fi:focus{border-color:var(--pu);box-shadow:0 0 0 3px rgba(124,77,255,.12);}
+.fi.chosen{border-color:var(--pu);background:#f4f2ff;}
+.fi.grn{background:#dcfce7!important;border-color:var(--og)!important;color:#15803d!important;}
+.fi.red{background:#ffe4e6!important;border-color:var(--rd)!important;color:#be123c!important;}
+.fi:disabled{opacity:.8;}
+
+.fb{margin-top:9px;padding:9px 13px;border-radius:10px;
+  font-size:.82rem;font-weight:700;display:none;}
+.fb.ok {background:#dcfce7;color:#15803d;display:block;}
+.fb.bad{background:#ffe4e6;color:#be123c;display:block;}
+
+.sub-wrap{text-align:center;margin:22px 0 10px;}
+.sub-btn{background:linear-gradient(135deg,var(--pu),var(--pk));
+  color:#fff;border:none;border-radius:50px;
+  padding:16px 50px;font-weight:800;font-size:1.05rem;
+  cursor:pointer;-webkit-appearance:none;min-height:54px;
+  box-shadow:0 8px 24px rgba(124,77,255,.35);}
+.sub-btn:active{transform:scale(.97);}
+.sub-btn:disabled{opacity:.32;cursor:not-allowed;}
+.sub-hint{text-align:center;font-size:.76rem;font-weight:600;color:#aaa;margin-top:8px;}
+
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;padding:20px;}
+@keyframes popIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+.mdl{background:#fff;border-radius:26px;padding:36px 26px;
+  text-align:center;max-width:340px;width:100%;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popIn .35s cubic-bezier(.34,1.56,.64,1);}
+.me{font-size:3.2rem;margin-bottom:8px;}
+.mt{font-weight:800;font-size:1.7rem;color:var(--pu);margin-bottom:6px;}
+.ms{font-weight:800;font-size:2.8rem;
+  background:linear-gradient(135deg,var(--pu),var(--pk));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:4px;}
+.msl{font-size:.78rem;color:#bbb;font-weight:600;margin-bottom:16px;}
+.mm{font-size:.95rem;font-weight:700;color:#555;margin-bottom:22px;line-height:1.5;}
+.mbtn{color:#fff;border:none;border-radius:50px;
+  padding:14px 36px;font-weight:800;font-size:1rem;
+  cursor:pointer;-webkit-appearance:none;min-height:50px;width:100%;}
+.mbtn:active{transform:scale(.97);}
+.mbtn.pu{background:linear-gradient(135deg,var(--pu),var(--pk));box-shadow:0 5px 16px rgba(124,77,255,.3);}
+.mbtn.gn{background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 5px 16px rgba(22,163,74,.3);}
+
+#fwc{position:fixed;inset:0;pointer-events:none;z-index:200;display:none;}
+
+.tphy{position:fixed;inset:0;
+  background:linear-gradient(160deg,#1a0533,#3d1278,#6d28d9);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  z-index:300;text-align:center;padding:30px;}
+.tphy.on{display:flex;}
+@keyframes bnc{from{transform:scale(1) rotate(-3deg)}to{transform:scale(1.12) rotate(3deg)}}
+.te{font-size:5.5rem;animation:bnc 1s ease infinite alternate;}
+.tt{font-weight:800;font-size:clamp(1.9rem,6vw,2.6rem);color:var(--ye);
+  margin:14px 0 8px;text-shadow:0 4px 20px rgba(0,0,0,.4);}
+.tstar{font-size:2rem;letter-spacing:10px;margin-bottom:18px;}
+.tsub{color:rgba(255,255,255,.85);font-size:1rem;font-weight:600;
+  margin-bottom:28px;line-height:1.6;max-width:300px;}
+.tbtn{background:var(--ye);color:#333;border:none;border-radius:50px;
+  padding:15px 40px;font-weight:800;font-size:1.1rem;
+  cursor:pointer;-webkit-appearance:none;min-height:54px;
+  box-shadow:0 6px 20px rgba(0,0,0,.3);}
+
+.footer{text-align:center;color:#c0b8e8;font-size:.7rem;font-weight:600;padding:0 14px 10px;}
+@media(max-width:360px){.brand{font-size:1.9rem;}}
+</style>
+</head>
+<body>
+
+<canvas id="fwc"></canvas>
+
+<div class="tphy" id="trophy">
+  <div class="te">🏆</div>
+  <div class="tt">You're a Champion!</div>
+  <div class="tstar">⭐ ⭐ ⭐</div>
+  <div class="tsub">
+    All three levels completed!<br>
+    Perfect 10/10 on Easy, Medium &amp; Hard.<br>
+    <span style="color:var(--ye)">You truly mastered "to be"! 🎉</span>
+  </div>
+  <button class="tbtn" id="btn-reset">🔄 Play Again</button>
+</div>
+
+<div class="ov" id="modal" style="display:none">
+  <div class="mdl">
+    <div class="me" id="me"></div>
+    <div class="mt" id="mt"></div>
+    <div class="ms" id="ms"></div>
+    <div class="msl">correct</div>
+    <div class="mm" id="mm"></div>
+    <button class="mbtn" id="mbtn"></button>
+  </div>
+</div>
+
+<div class="hdr">
+  <div class="o1"></div><div class="o2"></div>
+  <div class="brand">Frye <em>English</em></div>
+  <div class="brand-sub">Grammar Practice · To Be</div>
+  <div class="chips">
+    <span class="chip">✏️ Practice Mode</span>
+    <span class="chip">📝 Submit to Check</span>
+    <span class="chip">🍀 Good Luck!</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="lvc">
+    <div class="lvc-t">Choose your level</div>
+    <div class="lv-grid">
+      <button class="lv-btn easy" id="btn-easy" data-level="easy">
+        <span class="ic">🌱</span><span class="nm">Easy</span><span class="lb">Basics</span>
+      </button>
+      <button class="lv-btn medium locked" id="btn-medium" data-level="medium">
+        <span class="lk" id="lk-medium">🔒</span>
+        <span class="ic">🔥</span><span class="nm">Medium</span><span class="lb">Challenge</span>
+      </button>
+      <button class="lv-btn hard locked" id="btn-hard" data-level="hard">
+        <span class="lk" id="lk-hard">🔒</span>
+        <span class="ic">💎</span><span class="nm">Hard</span><span class="lb">Expert</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="main">
+    <div class="bn" id="bn">
+      <div id="bn-t"></div>
+      <div class="bn-d" id="bn-d"></div>
+    </div>
+    <div class="pg">
+      <div class="pg-l">Answered</div>
+      <div class="pg-bg"><div class="pg-bar" id="pgbar"></div></div>
+      <div class="pg-n" id="pgnum">0 / 10</div>
+    </div>
+    <div class="slbl">📋 10 Questions</div>
+    <div id="qwrap"></div>
+    <div class="sub-wrap">
+      <button class="sub-btn" id="subbtn" disabled>✅ Submit Answers</button>
+      <div class="sub-hint" id="subhint">Answer all 10 questions first</div>
+    </div>
+  </div>
+
+  <div class="footer">Frye English · Grammar Practice · To Be 🍀</div>
+</div>
+
+<script>
+var BANK={
+  easy:[
+    {t:'mc',q:'Choose the correct form:\n"I _____ 10 years old."',   o:['are','am','is','be'],       a:'b'},
+    {t:'mc',q:'Choose the correct form:\n"He _____ a student."',     o:['are','am','is','be'],       a:'c'},
+    {t:'mc',q:'Choose the correct form:\n"We _____ friends."',       o:['is','am','are','be'],       a:'c'},
+    {t:'mc',q:'Choose the correct form:\n"You _____ very nice."',    o:['is','am','are','be'],       a:'c'},
+    {t:'mc',q:'Choose the correct form:\n"It _____ a cat."',         o:['are','am','is','be'],       a:'c'},
+    {t:'mc',q:'Choose the correct form:\n"She _____ my sister."',    o:['are','am','is','be'],       a:'c'},
+    {t:'fill',q:'Fill in the blank:\n"They _____ happy."',           a:'are'},
+    {t:'fill',q:'Fill in the blank:\n"I _____ a teacher."',          a:'am'},
+    {t:'mc',q:'Choose the correct form:\n"The dog _____ big."',      o:['are','am','is','be'],       a:'c'},
+    {t:'mc',q:'Choose the correct form:\n"My parents _____ at home."',o:['is','am','are','be'],      a:'c'}
+  ],
+  medium:[
+    {t:'mc',  q:'Correct negative:\n"She _____ from France."',           o:["isn't not","isn't","aren't","amn't"],a:'b'},
+    {t:'fill',q:'Past tense:\n"Yesterday I _____ at home."',             a:'was'},
+    {t:'mc',  q:'Is this sentence correct?\n"We is tired after school."',o:['Yes, correct',"No, it's wrong"],a:'b'},
+    {t:'fill',q:'Past tense:\n"The dog _____ very loud yesterday."',     a:'was'},
+    {t:'mc',  q:'Correct question form:\n"_____ you ready?"',            o:['Is','Am','Are','Was'],   a:'c'},
+    {t:'mc',  q:'Choose the correct form:\n"My dog _____ very cute."',   o:['are','am','is','be'],    a:'c'},
+    {t:'fill',q:'Past tense:\n"We _____ at the park on Sunday."',        a:'were'},
+    {t:'mc',  q:'Correct negative:\n"I _____ tired today."',             o:["amn't","aren't","isn't","am not"],a:'d'},
+    {t:'mc',  q:'Correct question:\n"_____ he your brother?"',           o:['Are','Am','Is','Were'],  a:'c'},
+    {t:'fill',q:'Fill in the blank:\n"Where _____ you from?"',           a:'are'}
+  ],
+  hard:[
+    {t:'mc',  q:'Which sentence uses "to be" correctly in the present perfect?',
+              o:['"She have been to Paris."','"She has been to Paris."','"She is been to Paris."','"She are been to Paris."'],a:'b'},
+    {t:'fill',q:'Past tense (plural):\n"The children _____ very loud at the party."',a:'were'},
+    {t:'mc',  q:'Correct passive voice:\n"The letter _____ written by Anna."',
+              o:['were','have been','was','is been'],a:'c'},
+    {t:'fill',q:'Present perfect:\n"She _____ been waiting for an hour."',a:'has'},
+    {t:'mc',  q:'Which sentence is grammatically correct?',
+              o:['"They was at school."','"She were at school."','"He was at school."','"We was at school."'],a:'c'},
+    {t:'fill',q:'Reported speech:\n"He said he _____ happy."',           a:'was'},
+    {t:'mc',  q:'Correct conditional:\n"If I _____ you, I would study more."',
+              o:['am','is','were','was'],a:'c'},
+    {t:'mc',  q:'Correct passive:\n"The windows _____ broken."',         o:['is','am','were','has'],  a:'c'},
+    {t:'fill',q:'Fill in the blank:\n"We _____ going to travel next summer."',a:'are'},
+    {t:'mc',  q:'Correct tag question:\n"She is your teacher, _____ she?"',
+              o:["isn't","aren't","wasn't","doesn't"],a:'a'}
+  ]
+};
+
+var LL=['a','b','c','d'];
+var CFG={
+  easy:  {lbl:'🌱 Easy Mode',  desc:'Present tense basics',                  cls:'easy'},
+  medium:{lbl:'🔥 Medium Mode',desc:'Negatives, questions & past tense',     cls:'medium'},
+  hard:  {lbl:'💎 Hard Mode',  desc:'Perfect tenses, passive & conditionals',cls:'hard'}
+};
+var AC=['#7c4dff','#f9257e','#ff6d3a'];
+
+var lv=null,chosen={},results={},submitted=false;
+var unlocked={easy:true,medium:false,hard:false};
+
+function $(id){return document.getElementById(id);}
+
+function tryLevel(l){
+  if(!unlocked[l]){
+    var b=$('btn-'+l);
+    b.style.animation='none';
+    void b.offsetHeight;
+    b.style.animation='shake .3s ease';
+    setTimeout(function(){b.style.animation='';},400);
+    return;
+  }
+  lv=l; chosen={}; results={}; submitted=false;
+  document.querySelectorAll('.lv-btn').forEach(function(b){b.classList.remove('sel');});
+  $('btn-'+l).classList.add('sel');
+  var c=CFG[l];
+  var bn=$('bn'); bn.className='bn '+c.cls;
+  $('bn-t').textContent=c.lbl;
+  $('bn-d').textContent=c.desc;
+  $('pgbar').style.width='0%';
+  $('pgnum').textContent='0 / 10';
+  $('subbtn').disabled=true;
+  $('subhint').textContent='Answer all 10 questions first';
+  buildQs(BANK[l]);
+  $('main').style.display='block';
+  setTimeout(function(){
+    $('main').scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function esc(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function buildQs(qs){
+  var w=$('qwrap'); w.innerHTML='';
+  for(var i=0;i<qs.length;i++){
+    var q=qs[i],n=i+1,col=AC[i%3];
+    var body='';
+    if(q.t==='mc'){
+      body='<div class="opts">';
+      for(var j=0;j<q.o.length;j++){
+        var ll=LL[j];
+        body+='<button class="opt" id="ob'+n+'_'+ll+'" data-n="'+n+'" data-l="'+ll+'">'
+             +'<span class="od">'+ll.toUpperCase()+'</span>'+esc(q.o[j])+'</button>';
+      }
+      body+='</div>';
+    } else {
+      body='<div class="frow">'
+          +'<input class="fi" id="fi'+n+'" type="text" inputmode="text"'
+          +' placeholder="type your answer…"'
+          +' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"'
+          +' data-n="'+n+'"'
+          +'/></div>';
+    }
+    var div=document.createElement('div');
+    div.className='qc';
+    div.id='qc'+n;
+    div.style.borderLeftColor=col;
+    div.innerHTML=
+      '<div class="qh">'
+        +'<span class="qnum" id="qnum'+n+'" style="background:'+col+'">Question '+n+'</span>'
+        +'<span class="qico" id="qico'+n+'"></span>'
+      +'</div>'
+      +'<div class="qtxt">'+esc(q.q)+'</div>'
+      +body
+      +'<div class="fb" id="fb'+n+'"></div>';
+    w.appendChild(div);
+  }
+
+  // Attach events AFTER building DOM
+  attachQEvents();
+}
+
+function attachQEvents(){
+  // MC buttons
+  var opts=document.querySelectorAll('.opt');
+  for(var i=0;i<opts.length;i++){
+    (function(el){
+      el.addEventListener('touchend',function(e){
+        e.preventDefault();
+        pickMC(parseInt(el.dataset.n), el.dataset.l);
+      },false);
+      el.addEventListener('click',function(e){
+        pickMC(parseInt(el.dataset.n), el.dataset.l);
+      },false);
+    })(opts[i]);
+  }
+  // Fill inputs
+  var fills=document.querySelectorAll('.fi');
+  for(var j=0;j<fills.length;j++){
+    (function(el){
+      el.addEventListener('input',function(){
+        pickFill(parseInt(el.dataset.n));
+      },false);
+      el.addEventListener('keydown',function(e){
+        if(e.key==='Enter') e.preventDefault();
+      },false);
+    })(fills[j]);
+  }
+}
+
+function pickMC(n,letter){
+  if(submitted && results[n]===true) return;
+  chosen[n]=letter;
+  var q=BANK[lv][n-1];
+  for(var j=0;j<q.o.length;j++){
+    var el=$('ob'+n+'_'+LL[j]);
+    if(!el) continue;
+    el.classList.remove('chosen','grn','red');
+    if(LL[j]===letter) el.classList.add('chosen');
+  }
+  if(submitted && results[n]===false){
+    $('fb'+n).className='fb';
+    var c=$('qc'+n);
+    c.classList.remove('ok','bad');
+    $('qico'+n).textContent='';
+  }
+  updateProg();
+}
+
+function pickFill(n){
+  if(submitted && results[n]===true) return;
+  var val=$('fi'+n).value;
+  if(val.trim()) chosen[n]=val; else delete chosen[n];
+  if(submitted && results[n]===false){
+    var fi=$('fi'+n);
+    fi.classList.remove('grn','red','chosen');
+    if(val.trim()) fi.classList.add('chosen');
+    $('fb'+n).className='fb';
+    $('qc'+n).classList.remove('ok','bad');
+    $('qico'+n).textContent='';
+  }
+  updateProg();
+}
+
+function updateProg(){
+  var count=0;
+  if(!submitted){
+    count=Object.keys(chosen).length;
+  } else {
+    for(var i=1;i<=10;i++){
+      if(results[i]===true) count++;
+      else if(chosen[i]!==undefined) count++;
+    }
+  }
+  $('pgbar').style.width=(count/10*100)+'%';
+  $('pgnum').textContent=count+' / 10';
+  var all=(count===10);
+  $('subbtn').disabled=!all;
+  $('subhint').textContent=all
+    ?'Ready! Tap Submit to check your answers'
+    :'Answer all 10 questions first';
+}
+
+function submitAnswers(){
+  var qs=BANK[lv],correct=0,wrong=[];
+  submitted=true;
+  for(var i=1;i<=10;i++){
+    if(results[i]===true){ correct++; continue; }
+    var q=qs[i-1];
+    var ua=String(chosen[i]||'').trim().toLowerCase();
+    var ok=(ua===q.a);
+    results[i]=ok;
+    if(ok) correct++; else wrong.push(i);
+  }
+  applyVisuals();
+  if(wrong.length===0){
+    if(lv==='hard'){
+      setTimeout(function(){
+        startFW();
+        setTimeout(function(){ stopFW(); $('trophy').classList.add('on'); },4200);
+      },400);
+    } else {
+      var nl=lv==='easy'?'medium':'hard';
+      unlocked[nl]=true;
+      unlockBtn(nl);
+      showModal(true,correct);
+    }
+  } else {
+    $('subbtn').disabled=true;
+    $('subhint').textContent=wrong.length+' wrong – correct them and resubmit';
+  }
+}
+
+function applyVisuals(){
+  var qs=BANK[lv];
+  for(var i=1;i<=10;i++){
+    var n=i,q=qs[i-1];
+    var card=$('qc'+n),fb=$('fb'+n),ico=$('qico'+n);
+    if(results[n]===true){
+      card.classList.remove('bad','shk'); card.classList.add('ok');
+      ico.textContent='✅';
+      fb.className='fb ok'; fb.textContent='✅ Correct! Well done!';
+      if(q.t==='mc'){
+        for(var j=0;j<q.o.length;j++){
+          var el=$('ob'+n+'_'+LL[j]);
+          if(!el) continue;
+          el.classList.remove('chosen','red');
+          if(LL[j]===q.a) el.classList.add('grn');
+          el.disabled=true;
+        }
+      } else {
+        var fi=$('fi'+n);
+        fi.classList.remove('red','chosen'); fi.classList.add('grn'); fi.disabled=true;
+      }
+    } else {
+      card.classList.remove('ok');
+      card.classList.remove('shk');
+      void card.offsetHeight;
+      card.classList.add('bad','shk');
+      ico.textContent='❌';
+      fb.className='fb bad'; fb.textContent='❌ Not correct – try again!';
+      if(q.t==='mc'){
+        for(var j=0;j<q.o.length;j++){
+          var el2=$('ob'+n+'_'+LL[j]);
+          if(!el2) continue;
+          el2.disabled=false;
+          if(LL[j]===chosen[n]) el2.classList.add('red');
+          else el2.classList.remove('chosen','grn','red');
+        }
+        delete chosen[n];
+      } else {
+        var fi2=$('fi'+n);
+        fi2.disabled=false;
+        fi2.classList.remove('grn','chosen'); fi2.classList.add('red');
+        fi2.value=''; delete chosen[n];
+      }
+    }
+  }
+  updateProg();
+}
+
+function showModal(perfect,score){
+  $('me').textContent=perfect?(lv==='easy'?'🌟':'🔥'):'😅';
+  $('mt').textContent=perfect?'Level Complete!':'Not quite…';
+  $('ms').textContent=score+' / 10';
+  if(perfect){
+    var nl={easy:'Medium 🔥',medium:'Hard 💎'}[lv];
+    $('mm').textContent='🎉 Perfect! You unlocked '+nl+' Mode!';
+    $('mbtn').textContent='Start '+nl;
+    $('mbtn').className='mbtn gn';
+  } else {
+    $('mm').textContent='You need 10/10 to unlock the next level. Try again!';
+    $('mbtn').textContent='🔄 Try Again';
+    $('mbtn').className='mbtn pu';
+  }
+  $('modal').style.display='flex';
+}
+
+function closeModal(){
+  $('modal').style.display='none';
+  var allOk=true;
+  for(var k in results){ if(results[k]!==true){ allOk=false; break; } }
+  if(allOk){
+    var next={easy:'medium',medium:'hard'}[lv];
+    if(next) tryLevel(next);
+  } else {
+    tryLevel(lv);
+  }
+}
+
+function unlockBtn(l){
+  var btn=$('btn-'+l);
+  btn.classList.remove('locked');
+  var lk=$('lk-'+l);
+  if(lk) lk.parentNode.removeChild(lk);
+}
+
+function resetAll(){
+  $('trophy').classList.remove('on');
+  unlocked={easy:true,medium:false,hard:false};
+  ['medium','hard'].forEach(function(l){
+    var btn=$('btn-'+l);
+    btn.classList.add('locked'); btn.classList.remove('sel');
+    if(!$('lk-'+l)){
+      var s=document.createElement('span');
+      s.className='lk'; s.id='lk-'+l; s.textContent='🔒';
+      btn.insertBefore(s,btn.firstChild);
+    }
+  });
+  $('btn-easy').classList.remove('sel');
+  $('main').style.display='none';
+  lv=null; chosen={}; results={}; submitted=false;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* FIREWORKS */
+var cv=$('fwc'),cx=cv.getContext('2d'),fwP=[],fwR=null,fwT=null;
+function resizeFW(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
+function burst(){
+  var bx=Math.random()*cv.width,by=Math.random()*cv.height*.5+40;
+  var hh=[0,30,55,120,180,240,270,300];
+  for(var i=0;i<50;i++){
+    var a=Math.random()*Math.PI*2,s=Math.random()*10+3;
+    fwP.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,
+      l:1,d:Math.random()*.018+.009,sz:Math.random()*5+2,
+      c:'hsl('+hh[~~(Math.random()*hh.length)]+',100%,62%)',r:Math.random()<.5,g:.17});
+  }
+}
+function startFW(){
+  resizeFW(); cv.style.display='block'; fwP=[];
+  burst(); burst(); fwT=setInterval(burst,300);
+  var loop=function(){
+    cx.fillStyle='rgba(0,0,0,.18)'; cx.fillRect(0,0,cv.width,cv.height);
+    fwP=fwP.filter(function(p){
+      p.vx*=.99; p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.l-=p.d;
+      if(p.l<=0) return false;
+      cx.save(); cx.globalAlpha=Math.max(0,p.l); cx.fillStyle=p.c;
+      if(p.r){cx.translate(p.x,p.y);cx.rotate(p.l*8);cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);}
+      else{cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fill();}
+      cx.restore(); return true;
+    });
+    fwR=requestAnimationFrame(loop);
+  };
+  loop();
+}
+function stopFW(){
+  clearInterval(fwT); cancelAnimationFrame(fwR);
+  cv.style.display='none'; cx.clearRect(0,0,cv.width,cv.height); fwP=[];
+}
+window.addEventListener('resize',resizeFW);
+
+/* WIRE UP ALL BUTTONS via addEventListener after DOM ready */
+document.addEventListener('DOMContentLoaded', function(){
+
+  // Level buttons
+  ['easy','medium','hard'].forEach(function(l){
+    var btn=$('btn-'+l);
+    btn.addEventListener('touchend',function(e){
+      e.preventDefault(); tryLevel(l);
+    },false);
+    btn.addEventListener('click',function(){ tryLevel(l); },false);
+  });
+
+  // Submit button
+  $('subbtn').addEventListener('touchend',function(e){
+    e.preventDefault(); if(!$('subbtn').disabled) submitAnswers();
+  },false);
+  $('subbtn').addEventListener('click',function(){
+    if(!$('subbtn').disabled) submitAnswers();
+  },false);
+
+  // Modal close button
+  $('mbtn').addEventListener('touchend',function(e){
+    e.preventDefault(); closeModal();
+  },false);
+  $('mbtn').addEventListener('click',function(){ closeModal(); },false);
+
+  // Reset / play again
+  $('btn-reset').addEventListener('touchend',function(e){
+    e.preventDefault(); resetAll();
+  },false);
+  $('btn-reset').addEventListener('click',function(){ resetAll(); },false);
+});
+</script>
+</body>
+</html>
