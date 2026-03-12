@@ -49,7 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
   padding:20px 14px 24px;box-shadow:0 8px 28px rgba(0,0,0,.10);margin-bottom:18px;}
 .lvc-t{font-size:.72rem;font-weight:700;color:#bbb;
   letter-spacing:2.5px;text-transform:uppercase;text-align:center;margin-bottom:12px;}
-.lv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;}
+.lv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;}
 .lv-btn{border:2.5px solid transparent;border-radius:15px;padding:14px 4px 12px;
   font-weight:700;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -60,9 +60,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 .lv-btn .lb{font-size:.58rem;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;}
 .lv-btn.easy  {background:#f0fdf4;color:var(--gr);border-color:#bbf7d0;}
 .lv-btn.hard  {background:#fef2f2;color:var(--hr);border-color:#fecaca;}
+.lv-btn.bonus {background:#fffbeb;color:var(--me);border-color:#fde68a;}
 .lv-btn.locked{opacity:.35;cursor:not-allowed;filter:grayscale(.5);}
 .lv-btn.sel.easy  {background:var(--gr);color:#fff;border-color:var(--gr);box-shadow:0 6px 16px rgba(22,163,74,.35);}
 .lv-btn.sel.hard  {background:var(--hr);color:#fff;border-color:var(--hr);box-shadow:0 6px 16px rgba(220,38,38,.35);}
+.lv-btn.sel.bonus {background:var(--me);color:#fff;border-color:var(--me);box-shadow:0 6px 16px rgba(217,119,6,.35);}
 .lk{position:absolute;top:6px;right:8px;font-size:.72rem;opacity:.5;}
 
 #main{display:none;}
@@ -157,7 +159,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 .dd-chip.in-zone.grn{background:#dcfce7!important;border-color:var(--og)!important;color:#15803d!important;}
 .dd-chip.in-zone.red{background:#ffe4e6!important;border-color:var(--rd)!important;color:#be123c!important;}
 
-/* Match pairs */
 .match-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
 .match-left{flex:1;background:#ede8ff;border-radius:10px;padding:11px 13px;
   font-weight:700;font-size:.88rem;color:#555;text-align:center;
@@ -220,7 +221,75 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 .tbtn{background:var(--ye);color:#333;border:none;border-radius:50px;
   padding:15px 40px;font-weight:800;font-size:1.1rem;
   cursor:pointer;-webkit-appearance:none;min-height:54px;
-  box-shadow:0 6px 20px rgba(0,0,0,.3);}
+  box-shadow:0 6px 20px rgba(0,0,0,.3);margin:6px 0;}
+
+/* ===== MEMORY ===== */
+#memorySection{display:none;}
+.mem-banner{border-radius:15px;padding:12px 16px;margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-weight:700;font-size:.9rem;color:#fff;
+  background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 4px 14px rgba(217,119,6,.28);}
+.mem-banner .bn-d{font-size:.66rem;font-weight:600;opacity:.88;}
+.mem-stats{background:var(--cd);border-radius:13px;padding:11px 14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px;
+  display:flex;align-items:center;justify-content:space-around;gap:8px;}
+.mem-stat{text-align:center;}
+.mem-stat-val{font-weight:800;font-size:1.3rem;color:#d97706;}
+.mem-stat-lbl{font-size:.62rem;font-weight:700;color:#aaa;letter-spacing:1.5px;text-transform:uppercase;}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px;}
+@media(max-width:380px){.mem-grid{grid-template-columns:repeat(3,1fr);gap:7px;}}
+.mem-card{aspect-ratio:3/4;border-radius:14px;cursor:pointer;position:relative;perspective:600px;-webkit-perspective:600px;}
+.mem-card-inner{width:100%;height:100%;position:relative;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+  transform-style:preserve-3d;-webkit-transform-style:preserve-3d;}
+.mem-card.flipped .mem-card-inner,.mem-card.matched .mem-card-inner{transform:rotateY(180deg);}
+@keyframes matchPop{0%{transform:rotateY(180deg) scale(1)}50%{transform:rotateY(180deg) scale(1.1)}100%{transform:rotateY(180deg) scale(1)}}
+.mem-card.matched .mem-card-inner{animation:matchPop .4s ease;}
+.mem-front,.mem-back{position:absolute;inset:0;border-radius:14px;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;text-align:center;padding:6px;overflow:hidden;word-break:break-word;}
+.mem-front{background:linear-gradient(135deg,#1e8449,#27ae60);
+  color:rgba(255,255,255,.85);font-size:1.8rem;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.15);}
+.mem-back{transform:rotateY(180deg);background:#fff;
+  border:2.5px solid #e5e0ff;color:var(--tx);font-size:clamp(.7rem,2.8vw,.88rem);line-height:1.3;}
+.mem-card.matched .mem-back{border-color:var(--og);background:#dcfce7;color:#15803d;}
+.mem-back .lang-tag{position:absolute;top:4px;right:6px;font-size:.5rem;
+  font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.5;}
+.mem-result{display:none;text-align:center;padding:20px 0;}
+.mem-result.on{display:block;}
+.mr-emoji{font-size:4rem;margin-bottom:10px;}
+.mr-title{font-weight:800;font-size:1.5rem;color:#d97706;margin-bottom:6px;}
+.mr-stars{font-size:2rem;letter-spacing:8px;margin-bottom:10px;}
+.mr-score{font-weight:800;font-size:3rem;
+  background:linear-gradient(135deg,#d97706,var(--ye));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;margin-bottom:2px;}
+.mr-sub{font-size:.78rem;color:#bbb;font-weight:600;margin-bottom:16px;}
+.mr-details{font-size:.92rem;font-weight:700;color:#555;line-height:2;margin-bottom:20px;}
+
+.showoff{background:linear-gradient(160deg,#0a2e1a,#145a32,#1e8449);
+  border-radius:22px;padding:30px 24px;text-align:center;color:#fff;
+  box-shadow:0 12px 40px rgba(0,0,0,.25);margin:18px 0;position:relative;overflow:hidden;}
+.showoff::before{content:'';position:absolute;inset:0;
+  background-image:radial-gradient(circle,rgba(255,255,255,.05) 1.5px,transparent 1.5px);
+  background-size:20px 20px;}
+.showoff *{position:relative;z-index:1;}
+.so-emoji{font-size:3rem;margin-bottom:6px;}
+.so-title{font-weight:800;font-size:1.1rem;color:var(--ye);letter-spacing:1px;margin-bottom:4px;}
+.so-score{font-weight:900;font-size:3.2rem;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.4);}
+.so-label{font-size:.7rem;color:rgba(255,255,255,.5);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.so-detail{font-size:.85rem;font-weight:600;color:rgba(255,255,255,.75);line-height:1.8;}
+.so-stars{font-size:1.8rem;letter-spacing:8px;margin:10px 0;}
+.so-brand{font-size:.6rem;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:3px;text-transform:uppercase;margin-top:14px;}
+
+.mr-btn{display:inline-block;color:#fff;border:none;border-radius:50px;
+  padding:14px 36px;font-weight:800;font-size:1rem;
+  cursor:pointer;-webkit-appearance:none;min-height:50px;margin:4px;
+  background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 5px 16px rgba(217,119,6,.3);}
+.mr-btn:active{transform:scale(.97);}
+.mr-btn.secondary{background:linear-gradient(135deg,#1e8449,#27ae60);box-shadow:0 5px 16px rgba(30,132,73,.3);}
 
 .footer{text-align:center;color:#7dcea0;font-size:.7rem;font-weight:600;padding:0 14px 10px;}
 @media(max-width:360px){.brand{font-size:1.9rem;}}
@@ -232,14 +301,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
 
 <div class="tphy" id="trophy">
   <div class="te">🏆</div>
-  <div class="tt">Shopping Champion!</div>
+  <div class="tt">Quiz Champion!</div>
   <div class="tstar">⭐ ⭐ ⭐</div>
   <div class="tsub">
-    Both levels completed!<br>
-    Perfect scores on Easy &amp; Hard.<br>
-    <span style="color:var(--ye)">You mastered Grocery Vocabulary! 🛒🎉</span>
+    Both quiz levels completed!<br>
+    <span style="color:var(--ye)">Bonus Memory unlocked! 🧠🎉</span>
   </div>
-  <button class="tbtn" id="btn-reset">🔄 Play Again</button>
+  <button class="tbtn" id="btn-start-memory">🧠 Play Memory Bonus</button>
+  <button class="tbtn" id="btn-reset" style="background:#fff;color:#333;">🔄 Reset All</button>
 </div>
 
 <div class="ov" id="modal" style="display:none">
@@ -260,7 +329,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
   <div class="chips">
     <span class="chip">🛒 Vocabulary</span>
     <span class="chip">✏️ Write &amp; Match</span>
-    <span class="chip">🍀 Good Luck!</span>
+    <span class="chip">🧠 Memory Bonus</span>
   </div>
 </div>
 
@@ -275,14 +344,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
         <span class="lk" id="lk-hard">🔒</span>
         <span class="ic">💎</span><span class="nm">Hard</span><span class="lb">Expert</span>
       </button>
+      <button class="lv-btn bonus locked" id="btn-bonus" data-level="bonus">
+        <span class="lk" id="lk-bonus">🔒</span>
+        <span class="ic">🧠</span><span class="nm">Memory</span><span class="lb">Bonus</span>
+      </button>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <input id="cheatInput" type="text" inputmode="numeric" maxlength="4" placeholder="🔑 Code" autocomplete="off" style="border:1.5px solid #e5e0ff;border-radius:8px;padding:7px 14px;font-size:.82rem;font-weight:700;color:#999;text-align:center;width:100px;outline:none;background:#faf8ff;-webkit-appearance:none;" />
     </div>
   </div>
 
   <div id="main">
-    <div class="bn" id="bn">
-      <div id="bn-t"></div>
-      <div class="bn-d" id="bn-d"></div>
-    </div>
+    <div class="bn" id="bn"><div id="bn-t"></div><div class="bn-d" id="bn-d"></div></div>
     <div class="pg">
       <div class="pg-l">Answered</div>
       <div class="pg-bg"><div class="pg-bar" id="pgbar"></div></div>
@@ -296,807 +369,316 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
     </div>
   </div>
 
+  <div id="memorySection">
+    <div class="mem-banner"><div>🧠 Memory Bonus</div><div class="bn-d">Find all EN ↔ DE pairs!</div></div>
+    <div class="mem-stats">
+      <div class="mem-stat"><div class="mem-stat-val" id="mem-time">0:00</div><div class="mem-stat-lbl">Time</div></div>
+      <div class="mem-stat"><div class="mem-stat-val" id="mem-moves">0</div><div class="mem-stat-lbl">Moves</div></div>
+      <div class="mem-stat"><div class="mem-stat-val" id="mem-pairs">0 / 8</div><div class="mem-stat-lbl">Pairs</div></div>
+    </div>
+    <div class="mem-grid" id="memGrid"></div>
+    <div class="mem-result" id="memResult">
+      <div class="mr-emoji" id="mrEmoji"></div>
+      <div class="mr-title" id="mrTitle"></div>
+      <div class="mr-stars" id="mrStars"></div>
+      <div class="mr-score" id="mrScore"></div>
+      <div class="mr-sub">points</div>
+      <div class="mr-details" id="mrDetails"></div>
+      <div class="showoff" id="showoff">
+        <div class="so-emoji">🧠</div>
+        <div class="so-title">VOCGROCERY MEMORY</div>
+        <div class="so-score" id="soScore"></div>
+        <div class="so-label">points</div>
+        <div class="so-stars" id="soStars"></div>
+        <div class="so-detail" id="soDetail"></div>
+        <div class="so-brand">Vocgrocery · Grocery Shopping 🛒</div>
+      </div>
+      <button class="mr-btn" id="mrRetry">🔄 Play Again</button>
+      <button class="mr-btn secondary" id="mrBack">↩ Back to Levels</button>
+    </div>
+  </div>
+
   <div class="footer">Vocgrocery · Vocabulary Practice · Grocery Shopping 🛒</div>
 </div>
 
 <script>
-/* ===== QUESTION BANKS ===== */
-/*
-  Types:
-  mc   = multiple choice (o = options, a = 'a'|'b'|'c'|'d')
-  fill = type the answer (a = correct answer string, case-insensitive)
-  dd   = drag & drop into zones (chips = draggable words, zones = target zones each with label & answer)
-  match= left column given, type right column (pairs = [{l,a}])
-*/
-
 var BANK={
   easy:[
-    /* 1 – MC: Englisch → Deutsch */
     {t:'mc',q:'What is "shopping cart" in German?',
       o:['der Einkaufskorb','der Einkaufswagen','die Kasse','das Regal'],a:'b'},
-
-    /* 2 – Fill: Deutsch schreiben */
     {t:'fill',q:'Write the German word for "receipt".\n(mit Artikel, z.B. "der Apfel")',a:'der kassenbon'},
-
-    /* 3 – MC: Deutsch → Englisch */
     {t:'mc',q:'Was heißt "die Milch" auf Englisch?',
       o:['butter','cheese','milk','flour'],a:'c'},
-
-    /* 4 – Fill: Englisch schreiben */
     {t:'fill',q:'Write the English word for "die Kartoffel".',a:'potato'},
-
-    /* 5 – DD: Obst vs. Gemüse sortieren */
     {t:'dd',q:'Drag each word into the correct category: Fruit or Vegetable.',
       chips:['apple','carrot','banana','onion','tomato','grapes'],
-      zones:[
-        {label:'🍎 Fruit',answer:['apple','banana','grapes']},
-        {label:'🥦 Vegetable',answer:['carrot','onion','tomato']}
-      ]},
-
-    /* 6 – Fill: Satz ergänzen */
+      zones:[{label:'🍎 Fruit',answer:['apple','banana','grapes']},{label:'🥦 Vegetable',answer:['carrot','onion','tomato']}]},
     {t:'fill',q:'Complete the sentence:\n"Where can I find the _____?"\n(German: Wo finde ich die Milch?)',a:'milk'},
-
-    /* 7 – MC: Bild/Emoji-Zuordnung */
     {t:'mc',q:'🍌 Which English word matches this emoji?',
       o:['strawberry','banana','orange','apple'],a:'b'},
-
-    /* 8 – Match: 3 Paare schreiben (Deutsch → Englisch) */
     {t:'match',q:'Write the English translation for each German word.',
-      pairs:[
-        {l:'das Brot',a:'bread'},
-        {l:'der Käse',a:'cheese'},
-        {l:'der Zucker',a:'sugar'}
-      ]},
-
-    /* 9 – Fill: Deutsch schreiben */
-    {t:'fill',q:'Write the German word for "eggs".\n(mit Artikel, z.B. "der Hund")',a:'die eier'},
-
-    /* 10 – MC */
+      pairs:[{l:'das Brot',a:'bread'},{l:'der Käse',a:'cheese'},{l:'der Zucker',a:'sugar'}]},
+    {t:'fill',q:'Write the German word for "eggs".\n(mit Artikel, z.B. "das Brot")',a:'die eier'},
     {t:'mc',q:'What does "aisle" mean in German?',
       o:['das Regal','die Kasse','der Gang','der Preis'],a:'c'}
   ],
-
   hard:[
-    /* 1 – Fill: Satz übersetzen */
     {t:'fill',q:'Translate into English:\n"Wie viel kostet das?"',a:'how much does this cost'},
-
-    /* 2 – DD: Im Supermarkt vs. Lebensmittel */
     {t:'dd',q:'Sort these words: Which belong to "In the Supermarket" and which are "Food Items"?',
       chips:['checkout','rice','cashier','flour','shelf','pasta'],
-      zones:[
-        {label:'🏪 Supermarket',answer:['checkout','cashier','shelf']},
-        {label:'🍞 Food',answer:['rice','flour','pasta']}
-      ]},
-
-    /* 3 – Match: Englisch → Deutsch schreiben */
+      zones:[{label:'🏪 Supermarket',answer:['checkout','cashier','shelf']},{label:'🍞 Food',answer:['rice','flour','pasta']}]},
     {t:'match',q:'Write the German translation for each English word. (mit Artikel!)',
-      pairs:[
-        {l:'cucumber',a:'die gurke'},
-        {l:'strawberry',a:'die erdbeere'},
-        {l:'onion',a:'die zwiebel'}
-      ]},
-
-    /* 4 – Fill: Lückentext */
+      pairs:[{l:'cucumber',a:'die gurke'},{l:'strawberry',a:'die erdbeere'},{l:'onion',a:'die zwiebel'}]},
     {t:'fill',q:'Fill in the missing word:\n"I would like a _____, please."\n(German: Ich hätte gern eine Tüte, bitte.)',a:'bag'},
-
-    /* 5 – MC: Welcher Satz ist korrekt? */
     {t:'mc',q:'Which sentence is correct English?',
-      o:[
-        'Where can I found the milk?',
-        'Where can I find the milk?',
-        'Where I can find the milk?',
-        'Where can I finding the milk?'
-      ],a:'b'},
-
-    /* 6 – Fill: Deutsch schreiben */
+      o:['Where can I found the milk?','Where can I find the milk?','Where I can find the milk?','Where can I finding the milk?'],a:'b'},
     {t:'fill',q:'Write the German word for "discount".\n(mit Artikel)',a:'der rabatt'},
-
-    /* 7 – DD: Obst & Gemüse auf Deutsch zuordnen */
     {t:'dd',q:'Drag each German word to the correct English translation.',
       chips:['die Karotte','der Apfel','die Gurke','die Banane'],
-      zones:[
-        {label:'🥕 carrot',answer:['die karotte']},
-        {label:'🍎 apple',answer:['der apfel']},
-        {label:'🥒 cucumber',answer:['die gurke']},
-        {label:'🍌 banana',answer:['die banane']}
-      ]},
-
-    /* 8 – Fill: Satz übersetzen */
+      zones:[{label:'🥕 carrot',answer:['die karotte']},{label:'🍎 apple',answer:['der apfel']},{label:'🥒 cucumber',answer:['die gurke']},{label:'🍌 banana',answer:['die banane']}]},
     {t:'fill',q:'Translate into English:\n"Kann ich mit Karte bezahlen?"',a:'can i pay by card'},
-
-    /* 9 – Match: Deutsch → Englisch */
     {t:'match',q:'Write the English translation for each German word.',
-      pairs:[
-        {l:'das Salz',a:'salt'},
-        {l:'die Butter',a:'butter'},
-        {l:'das Mehl',a:'flour'}
-      ]},
-
-    /* 10 – MC: Satzbau */
+      pairs:[{l:'das Salz',a:'salt'},{l:'die Butter',a:'butter'},{l:'das Mehl',a:'flour'}]},
     {t:'mc',q:'"Haben Sie das in einer kleineren Größe?"\nWhat does this mean in English?',
-      o:[
-        'Do you have this in a bigger size?',
-        'Can I have a smaller bag?',
-        'Do you have this in a smaller size?',
-        'Is this the smallest size?'
-      ],a:'c'}
+      o:['Do you have this in a bigger size?','Can I have a smaller bag?','Do you have this in a smaller size?','Is this the smallest size?'],a:'c'}
   ]
 };
 
-var LL=['a','b','c','d'];
-var CFG={
-  easy:  {lbl:'🌱 Easy Mode',  desc:'Vocabulary basics & matching', cls:'easy'},
-  hard:  {lbl:'💎 Hard Mode',  desc:'Sentences, translation & sorting', cls:'hard'}
-};
-var AC=['#1e8449','#f9257e','#ff6d3a'];
+var MEM_PAIRS=[
+  {en:'bread',de:'das Brot'},{en:'milk',de:'die Milch'},{en:'cheese',de:'der Käse'},
+  {en:'eggs',de:'die Eier'},{en:'apple',de:'der Apfel'},{en:'potato',de:'die Kartoffel'},
+  {en:'tomato',de:'die Tomate'},{en:'cucumber',de:'die Gurke'},{en:'banana',de:'die Banane'},
+  {en:'rice',de:'der Reis'},{en:'sugar',de:'der Zucker'},{en:'flour',de:'das Mehl'},
+  {en:'onion',de:'die Zwiebel'},{en:'carrot',de:'die Karotte'},{en:'checkout',de:'die Kasse'},
+  {en:'receipt',de:'der Kassenbon'}
+];
 
+var LL=['a','b','c','d'];
+var CFG={easy:{lbl:'🌱 Easy Mode',desc:'Vocabulary basics & matching',cls:'easy'},hard:{lbl:'💎 Hard Mode',desc:'Sentences, translation & sorting',cls:'hard'}};
+var AC=['#1e8449','#f9257e','#ff6d3a'];
 var lv=null,chosen={},results={},submitted=false;
-var unlocked={easy:true,hard:false};
+var unlocked={easy:true,hard:false,bonus:false};
 var TOTAL=10;
 
 function $(id){return document.getElementById(id);}
+var SCROLL_THRESH=12;
+function tapify(el,cb){
+  var sy=0;
+  el.addEventListener('touchstart',function(e){sy=e.touches[0].clientY;},{passive:true});
+  el.addEventListener('touchend',function(e){
+    if(Math.abs(e.changedTouches[0].clientY-sy)<SCROLL_THRESH){e.preventDefault();cb();}
+  },false);
+  el.addEventListener('click',function(){cb();},false);
+}
 
 function tryLevel(l){
-  if(!unlocked[l]){
-    var b=$('btn-'+l);
-    b.style.animation='none';
-    void b.offsetHeight;
-    b.style.animation='shake .3s ease';
-    setTimeout(function(){b.style.animation='';},400);
-    return;
+  if(l==='bonus'){
+    if(!unlocked.bonus){var b=$('btn-bonus');b.style.animation='none';void b.offsetHeight;b.style.animation='shake .3s ease';setTimeout(function(){b.style.animation='';},400);return;}
+    $('main').style.display='none';
+    document.querySelectorAll('.lv-btn').forEach(function(b){b.classList.remove('sel');});
+    $('btn-bonus').classList.add('sel');
+    startMemory(); return;
   }
-  lv=l; chosen={}; results={}; submitted=false;
+  if(!unlocked[l]){var b2=$('btn-'+l);b2.style.animation='none';void b2.offsetHeight;b2.style.animation='shake .3s ease';setTimeout(function(){b2.style.animation='';},400);return;}
+  $('memorySection').style.display='none'; stopMemTimer();
+  lv=l;chosen={};results={};submitted=false;
   document.querySelectorAll('.lv-btn').forEach(function(b){b.classList.remove('sel');});
   $('btn-'+l).classList.add('sel');
-  var c=CFG[l];
-  var bn=$('bn'); bn.className='bn '+c.cls;
-  $('bn-t').textContent=c.lbl;
-  $('bn-d').textContent=c.desc;
-  $('pgbar').style.width='0%';
-  $('pgnum').textContent='0 / '+TOTAL;
-  $('subbtn').disabled=true;
-  $('subhint').textContent='Answer all '+TOTAL+' questions first';
-  buildQs(BANK[l]);
-  $('main').style.display='block';
-  setTimeout(function(){
-    $('main').scrollIntoView({behavior:'smooth',block:'start'});
-  },100);
+  var c=CFG[l],bn=$('bn');bn.className='bn '+c.cls;
+  $('bn-t').textContent=c.lbl;$('bn-d').textContent=c.desc;
+  $('pgbar').style.width='0%';$('pgnum').textContent='0 / '+TOTAL;
+  $('subbtn').disabled=true;$('subhint').textContent='Answer all '+TOTAL+' questions first';
+  buildQs(BANK[l]);$('main').style.display='block';
+  setTimeout(function(){$('main').scrollIntoView({behavior:'smooth',block:'start'});},100);
 }
 
-function esc(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function shuffle(arr){
-  var a=arr.slice();
-  for(var i=a.length-1;i>0;i--){
-    var j=Math.floor(Math.random()*(i+1));
-    var t=a[i];a[i]=a[j];a[j]=t;
-  }
-  return a;
-}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shuffle(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 
 function buildQs(qs){
-  var w=$('qwrap'); w.innerHTML='';
+  var w=$('qwrap');w.innerHTML='';
   for(var i=0;i<qs.length;i++){
-    var q=qs[i],n=i+1,col=AC[i%3];
-    var body='';
-
+    var q=qs[i],n=i+1,col=AC[i%3],body='';
     if(q.t==='mc'){
       body='<div class="opts">';
-      for(var j=0;j<q.o.length;j++){
-        var ll=LL[j];
-        body+='<button class="opt" id="ob'+n+'_'+ll+'" data-n="'+n+'" data-l="'+ll+'">'
-             +'<span class="od">'+ll.toUpperCase()+'</span>'+esc(q.o[j])+'</button>';
-      }
+      for(var j=0;j<q.o.length;j++){var ll=LL[j];body+='<button class="opt" id="ob'+n+'_'+ll+'" data-n="'+n+'" data-l="'+ll+'"><span class="od">'+ll.toUpperCase()+'</span>'+esc(q.o[j])+'</button>';}
       body+='</div>';
-    }
-    else if(q.t==='fill'){
-      body='<div class="frow">'
-          +'<input class="fi" id="fi'+n+'" type="text" inputmode="text"'
-          +' placeholder="type your answer…"'
-          +' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"'
-          +' data-n="'+n+'"'
-          +'/></div>';
-    }
-    else if(q.t==='dd'){
-      // Build zones
+    } else if(q.t==='fill'){
+      body='<div class="frow"><input class="fi" id="fi'+n+'" type="text" inputmode="text" placeholder="type your answer…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-n="'+n+'"/></div>';
+    } else if(q.t==='dd'){
       body='<div id="dd-zones-'+n+'">';
-      for(var z=0;z<q.zones.length;z++){
-        body+='<div class="dd-zone" id="dz'+n+'_'+z+'" data-n="'+n+'" data-z="'+z+'">'
-             +'<span class="dd-zone-lbl">'+esc(q.zones[z].label)+'</span>'
-             +'</div>';
-      }
-      body+='</div>';
-      // Build chip bank (shuffled)
-      var shuffled=shuffle(q.chips);
+      for(var z=0;z<q.zones.length;z++){body+='<div class="dd-zone" id="dz'+n+'_'+z+'" data-n="'+n+'" data-z="'+z+'"><span class="dd-zone-lbl">'+esc(q.zones[z].label)+'</span></div>';}
+      body+='</div>';var sh=shuffle(q.chips);
       body+='<div class="dd-bank" id="db'+n+'">';
-      for(var c2=0;c2<shuffled.length;c2++){
-        body+='<span class="dd-chip" id="dc'+n+'_'+c2+'" draggable="true"'
-             +' data-n="'+n+'" data-val="'+esc(shuffled[c2])+'"'
-             +' data-idx="'+c2+'">'
-             +esc(shuffled[c2])+'</span>';
-      }
-      body+='</div>';
-      body+='<div style="font-size:.65rem;color:#aaa;font-weight:600;text-align:center;margin-top:4px;">Tap a word, then tap a category · or drag &amp; drop</div>';
+      for(var c2=0;c2<sh.length;c2++){body+='<span class="dd-chip" id="dc'+n+'_'+c2+'" draggable="true" data-n="'+n+'" data-val="'+esc(sh[c2])+'" data-idx="'+c2+'">'+esc(sh[c2])+'</span>';}
+      body+='</div><div style="font-size:.65rem;color:#aaa;font-weight:600;text-align:center;margin-top:4px;">Tap a word, then tap a category · or drag &amp; drop</div>';
+    } else if(q.t==='match'){
+      body='';for(var m=0;m<q.pairs.length;m++){body+='<div class="match-row"><div class="match-left">'+esc(q.pairs[m].l)+'</div><div class="match-right"><input class="fi" id="mi'+n+'_'+m+'" type="text" inputmode="text" placeholder="translation…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-n="'+n+'" data-m="'+m+'"/></div></div>';}
     }
-    else if(q.t==='match'){
-      body='';
-      for(var m=0;m<q.pairs.length;m++){
-        body+='<div class="match-row">'
-             +'<div class="match-left">'+esc(q.pairs[m].l)+'</div>'
-             +'<div class="match-right">'
-             +'<input class="fi" id="mi'+n+'_'+m+'" type="text" inputmode="text"'
-             +' placeholder="translation…"'
-             +' autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"'
-             +' data-n="'+n+'" data-m="'+m+'"'
-             +'/></div></div>';
-      }
-    }
-
-    var div=document.createElement('div');
-    div.className='qc';
-    div.id='qc'+n;
-    div.style.borderLeftColor=col;
-    div.innerHTML=
-      '<div class="qh">'
-        +'<span class="qnum" id="qnum'+n+'" style="background:'+col+'">Question '+n+'</span>'
-        +'<span class="qico" id="qico'+n+'"></span>'
-      +'</div>'
-      +'<div class="qtxt">'+esc(q.q)+'</div>'
-      +body
-      +'<div class="fb" id="fb'+n+'"></div>';
+    var div=document.createElement('div');div.className='qc';div.id='qc'+n;div.style.borderLeftColor=col;
+    div.innerHTML='<div class="qh"><span class="qnum" id="qnum'+n+'" style="background:'+col+'">Question '+n+'</span><span class="qico" id="qico'+n+'"></span></div><div class="qtxt">'+esc(q.q)+'</div>'+body+'<div class="fb" id="fb'+n+'"></div>';
     w.appendChild(div);
   }
   attachQEvents();
 }
 
-/* Scroll-aware tap: only fire if finger moved < 12px vertically */
-var SCROLL_THRESH=12;
-function tapify(el,callback){
-  var sy=0;
-  el.addEventListener('touchstart',function(e){
-    sy=e.touches[0].clientY;
-  },{passive:true});
-  el.addEventListener('touchend',function(e){
-    var dy=Math.abs(e.changedTouches[0].clientY-sy);
-    if(dy<SCROLL_THRESH){ e.preventDefault(); callback(); }
-  },false);
-  el.addEventListener('click',function(){ callback(); },false);
-}
-
 function attachQEvents(){
-  // MC buttons
-  document.querySelectorAll('.opt').forEach(function(el){
-    tapify(el,function(){ pickMC(parseInt(el.dataset.n),el.dataset.l); });
-  });
-
-  // Fill inputs
-  document.querySelectorAll('.fi[data-n]:not([data-m])').forEach(function(el){
-    el.addEventListener('input',function(){ pickFill(parseInt(el.dataset.n)); },false);
-    el.addEventListener('keydown',function(e){ if(e.key==='Enter') e.preventDefault(); },false);
-  });
-
-  // Match inputs
-  document.querySelectorAll('.fi[data-m]').forEach(function(el){
-    el.addEventListener('input',function(){ pickMatch(parseInt(el.dataset.n)); },false);
-    el.addEventListener('keydown',function(e){ if(e.key==='Enter') e.preventDefault(); },false);
-  });
-
-  // Drag & drop
+  document.querySelectorAll('.opt').forEach(function(el){tapify(el,function(){pickMC(parseInt(el.dataset.n),el.dataset.l);});});
+  document.querySelectorAll('.fi[data-n]:not([data-m])').forEach(function(el){el.addEventListener('input',function(){pickFill(parseInt(el.dataset.n));},false);el.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();},false);});
+  document.querySelectorAll('.fi[data-m]').forEach(function(el){el.addEventListener('input',function(){pickMatch(parseInt(el.dataset.n));},false);el.addEventListener('keydown',function(e){if(e.key==='Enter')e.preventDefault();},false);});
   setupDD();
 }
 
-/* ===== DRAG & DROP ===== */
 function setupDD(){
-  var chips=document.querySelectorAll('.dd-chip');
-  var zones=document.querySelectorAll('.dd-zone');
-
-  // Desktop drag
+  var chips=document.querySelectorAll('.dd-chip'),zones=document.querySelectorAll('.dd-zone');
   chips.forEach(function(chip){
-    chip.addEventListener('dragstart',function(e){
-      e.dataTransfer.setData('text/plain',chip.id);
-      setTimeout(function(){chip.style.opacity='.5';},0);
-    });
+    chip.addEventListener('dragstart',function(e){e.dataTransfer.setData('text/plain',chip.id);setTimeout(function(){chip.style.opacity='.5';},0);});
     chip.addEventListener('dragend',function(){chip.style.opacity='';});
   });
-
   zones.forEach(function(zone){
     zone.addEventListener('dragover',function(e){e.preventDefault();zone.classList.add('over');});
     zone.addEventListener('dragleave',function(){zone.classList.remove('over');});
-    zone.addEventListener('drop',function(e){
-      e.preventDefault(); zone.classList.remove('over');
-      var chipId=e.dataTransfer.getData('text/plain');
-      var chip=document.getElementById(chipId);
-      if(chip && !chip.classList.contains('placed')){
-        placeChipInZone(chip,zone);
-      }
-    });
+    zone.addEventListener('drop',function(e){e.preventDefault();zone.classList.remove('over');var cid=e.dataTransfer.getData('text/plain');var c=document.getElementById(cid);if(c&&!c.classList.contains('placed'))placeChipInZone(c,zone);});
   });
-
-  // Mobile: tap-to-select chip, then tap zone to place.
-  // Also supports drag if finger moves enough.
-  var selectedChip=null;
-  var touchChip=null,touchClone=null,touchStartX=0,touchStartY=0,dragActive=false,wasScroll=false;
-  var DD_DRAG_THRESH=14;
-
-  function deselectChip(){
-    if(selectedChip){selectedChip.classList.remove('dd-selected');selectedChip=null;}
-  }
-
+  var selectedChip=null,touchChip=null,touchClone=null,touchStartX=0,touchStartY=0,dragActive=false,wasScroll=false,DD=14;
+  function desel(){if(selectedChip){selectedChip.classList.remove('dd-selected');selectedChip=null;}}
   chips.forEach(function(chip){
-    chip.addEventListener('touchstart',function(e){
-      if(chip.classList.contains('placed')) return;
-      touchChip=chip; dragActive=false; wasScroll=false; touchClone=null;
-      var t=e.touches[0];
-      touchStartX=t.clientX; touchStartY=t.clientY;
-    },{passive:true});
-
-    chip.addEventListener('touchmove',function(e){
-      if(!touchChip) return;
-      var t=e.touches[0];
-      var dx=Math.abs(t.clientX-touchStartX), dy=Math.abs(t.clientY-touchStartY);
-      if(!dragActive){
-        // Vertical scroll – let browser handle it
-        if(dy>DD_DRAG_THRESH && dy>dx){ wasScroll=true; touchChip=null; return; }
-        // Horizontal/diagonal drag – start chip drag
-        if(dx>DD_DRAG_THRESH || (dx+dy)>DD_DRAG_THRESH*1.5){
-          dragActive=true;
-          deselectChip();
-          touchClone=chip.cloneNode(true);
-          touchClone.style.position='fixed';
-          touchClone.style.zIndex='9999';
-          touchClone.style.pointerEvents='none';
-          touchClone.style.opacity='.85';
-          touchClone.style.transform='scale(1.1)';
-          document.body.appendChild(touchClone);
-          chip.style.opacity='.3';
-        } else { return; }
-      }
-      if(dragActive){
-        e.preventDefault();
-        touchClone.style.left=(t.clientX-40)+'px';
-        touchClone.style.top=(t.clientY-20)+'px';
-      }
-    },{passive:false});
-
-    chip.addEventListener('touchend',function(e){
-      if(wasScroll){touchChip=null;wasScroll=false;return;}
-      if(!touchChip) return;
-      if(dragActive && touchClone){
-        // Finish drag
-        e.preventDefault();
-        document.body.removeChild(touchClone);
-        touchChip.style.opacity='';
-        var t=e.changedTouches[0];
-        var el=document.elementFromPoint(t.clientX,t.clientY);
-        var zone=el?el.closest('.dd-zone'):null;
-        if(zone && !touchChip.classList.contains('placed')){
-          placeChipInZone(touchChip,zone);
-        }
-      } else {
-        // Short tap – select/deselect chip
-        e.preventDefault();
-        if(selectedChip===chip){
-          deselectChip();
-        } else {
-          deselectChip();
-          selectedChip=chip;
-          chip.classList.add('dd-selected');
-        }
-      }
-      touchChip=null; touchClone=null; dragActive=false;
-    },{passive:false});
+    chip.addEventListener('touchstart',function(e){if(chip.classList.contains('placed'))return;touchChip=chip;dragActive=false;wasScroll=false;touchClone=null;var t=e.touches[0];touchStartX=t.clientX;touchStartY=t.clientY;},{passive:true});
+    chip.addEventListener('touchmove',function(e){if(!touchChip)return;var t=e.touches[0],dx=Math.abs(t.clientX-touchStartX),dy=Math.abs(t.clientY-touchStartY);if(!dragActive){if(dy>DD&&dy>dx){wasScroll=true;touchChip=null;return;}if(dx>DD||(dx+dy)>DD*1.5){dragActive=true;desel();touchClone=chip.cloneNode(true);touchClone.style.position='fixed';touchClone.style.zIndex='9999';touchClone.style.pointerEvents='none';touchClone.style.opacity='.85';touchClone.style.transform='scale(1.1)';document.body.appendChild(touchClone);chip.style.opacity='.3';}else return;}if(dragActive){e.preventDefault();touchClone.style.left=(t.clientX-40)+'px';touchClone.style.top=(t.clientY-20)+'px';}},{passive:false});
+    chip.addEventListener('touchend',function(e){if(wasScroll){touchChip=null;wasScroll=false;return;}if(!touchChip)return;if(dragActive&&touchClone){e.preventDefault();document.body.removeChild(touchClone);touchChip.style.opacity='';var t=e.changedTouches[0],el=document.elementFromPoint(t.clientX,t.clientY),z=el?el.closest('.dd-zone'):null;if(z&&!touchChip.classList.contains('placed'))placeChipInZone(touchChip,z);}else{e.preventDefault();if(selectedChip===chip)desel();else{desel();selectedChip=chip;chip.classList.add('dd-selected');}}touchChip=null;touchClone=null;dragActive=false;},{passive:false});
   });
-
-  // Tap on zone → place selected chip there
   zones.forEach(function(zone){
-    zone.addEventListener('touchstart',function(e){
-      zone._tsy=e.touches[0].clientY;
-    },{passive:true});
-    zone.addEventListener('touchend',function(e){
-      var dy=Math.abs(e.changedTouches[0].clientY-(zone._tsy||0));
-      if(dy>SCROLL_THRESH) return; // was a scroll
-      if(selectedChip && !selectedChip.classList.contains('placed')){
-        e.preventDefault();
-        placeChipInZone(selectedChip,zone);
-        deselectChip();
-      }
-    },{passive:false});
+    zone.addEventListener('touchstart',function(e){zone._tsy=e.touches[0].clientY;},{passive:true});
+    zone.addEventListener('touchend',function(e){var dy=Math.abs(e.changedTouches[0].clientY-(zone._tsy||0));if(dy>SCROLL_THRESH)return;if(selectedChip&&!selectedChip.classList.contains('placed')){e.preventDefault();placeChipInZone(selectedChip,zone);desel();}},{passive:false});
   });
 }
 
 function placeChipInZone(chip,zone){
-  var n=parseInt(chip.dataset.n);
-  var val=chip.dataset.val;
-  // Create a copy in the zone
-  var tag=document.createElement('span');
-  tag.className='dd-chip in-zone';
-  tag.textContent=val;
-  tag.dataset.val=val;
-  tag.dataset.n=n;
-  tag.dataset.srcId=chip.id;
-  // Tap to remove (scroll-safe)
-  tapify(tag,function(){
-    zone.removeChild(tag);
-    chip.classList.remove('placed');
-    chip.style.opacity='';
-    if(submitted && results[n]===false) clearQFeedback(n);
-    updateDDChosen(n);
-    updateProg();
-  });
-  zone.appendChild(tag);
-  chip.classList.add('placed');
-  if(submitted && results[n]===false) clearQFeedback(n);
-  updateDDChosen(n);
-  updateProg();
+  var n=parseInt(chip.dataset.n),val=chip.dataset.val;
+  var tag=document.createElement('span');tag.className='dd-chip in-zone';tag.textContent=val;tag.dataset.val=val;tag.dataset.n=n;tag.dataset.srcId=chip.id;
+  tapify(tag,function(){zone.removeChild(tag);chip.classList.remove('placed');chip.style.opacity='';if(submitted&&results[n]===false)clearQFB(n);updateDDC(n);updateProg();});
+  zone.appendChild(tag);chip.classList.add('placed');
+  if(submitted&&results[n]===false)clearQFB(n);updateDDC(n);updateProg();
 }
+function clearQFB(n){$('fb'+n).className='fb';$('qc'+n).classList.remove('ok','bad');$('qico'+n).textContent='';var q=BANK[lv][n-1];if(q.t==='dd'){for(var z=0;z<q.zones.length;z++){var ze=$('dz'+n+'_'+z);if(ze)ze.classList.remove('grn','red');if(ze)ze.querySelectorAll('.dd-chip.in-zone').forEach(function(c){c.classList.remove('grn','red');});}}}
+function updateDDC(n){var q=BANK[lv][n-1],data={};for(var z=0;z<q.zones.length;z++){var ze=$('dz'+n+'_'+z),v=[];ze.querySelectorAll('.dd-chip.in-zone').forEach(function(c){v.push(c.dataset.val);});data[z]=v;}var tot=q.chips.length,pc=0;for(var k in data)pc+=data[k].length;if(pc===tot)chosen[n]=data;else delete chosen[n];}
 
-function clearQFeedback(n){
-  $('fb'+n).className='fb';
-  $('qc'+n).classList.remove('ok','bad');
-  $('qico'+n).textContent='';
-  // Clear zone styling
-  var q=BANK[lv][n-1];
-  if(q.t==='dd'){
-    for(var z=0;z<q.zones.length;z++){
-      var ze=$('dz'+n+'_'+z);
-      if(ze){ze.classList.remove('grn','red');}
-    }
-    ze && ze.querySelectorAll('.dd-chip.in-zone').forEach(function(c){
-      c.classList.remove('grn','red');
-    });
-  }
-}
+function pickMC(n,letter){if(submitted&&results[n]===true)return;chosen[n]=letter;var q=BANK[lv][n-1];for(var j=0;j<q.o.length;j++){var el=$('ob'+n+'_'+LL[j]);if(!el)continue;el.classList.remove('chosen','grn','red');if(LL[j]===letter)el.classList.add('chosen');}if(submitted&&results[n]===false)clearQFB(n);updateProg();}
+function pickFill(n){if(submitted&&results[n]===true)return;var v=$('fi'+n).value;if(v.trim())chosen[n]=v;else delete chosen[n];if(submitted&&results[n]===false){var fi=$('fi'+n);fi.classList.remove('grn','red','chosen');if(v.trim())fi.classList.add('chosen');clearQFB(n);}updateProg();}
+function pickMatch(n){if(submitted&&results[n]===true)return;var q=BANK[lv][n-1],ok=true,vals={};for(var m=0;m<q.pairs.length;m++){var fi=$('mi'+n+'_'+m);if(fi.value.trim())vals[m]=fi.value;else ok=false;}if(ok)chosen[n]=vals;else delete chosen[n];if(submitted&&results[n]===false){for(var m2=0;m2<q.pairs.length;m2++){var fi2=$('mi'+n+'_'+m2);fi2.classList.remove('grn','red','chosen');if(fi2.value.trim())fi2.classList.add('chosen');}clearQFB(n);}updateProg();}
 
-function updateDDChosen(n){
-  var q=BANK[lv][n-1];
-  // Collect what's in each zone
-  var allFilled=true;
-  var data={};
-  for(var z=0;z<q.zones.length;z++){
-    var ze=$('dz'+n+'_'+z);
-    var inZone=ze.querySelectorAll('.dd-chip.in-zone');
-    var vals=[];
-    inZone.forEach(function(c){vals.push(c.dataset.val);});
-    data[z]=vals;
-  }
-  // Check all chips placed
-  var totalChips=q.chips.length;
-  var placedCount=0;
-  for(var k in data) placedCount+=data[k].length;
-  if(placedCount===totalChips){
-    chosen[n]=data;
-  } else {
-    delete chosen[n];
-  }
-}
+function updateProg(){var c=0;if(!submitted)c=Object.keys(chosen).length;else{for(var i=1;i<=TOTAL;i++){if(results[i]===true)c++;else if(chosen[i]!==undefined)c++;}}$('pgbar').style.width=(c/TOTAL*100)+'%';$('pgnum').textContent=c+' / '+TOTAL;var a=(c===TOTAL);$('subbtn').disabled=!a;$('subhint').textContent=a?'Ready! Tap Submit to check your answers':'Answer all '+TOTAL+' questions first';}
 
-/* ===== MC / Fill / Match handlers ===== */
-function pickMC(n,letter){
-  if(submitted && results[n]===true) return;
-  chosen[n]=letter;
-  var q=BANK[lv][n-1];
-  for(var j=0;j<q.o.length;j++){
-    var el=$('ob'+n+'_'+LL[j]);
-    if(!el) continue;
-    el.classList.remove('chosen','grn','red');
-    if(LL[j]===letter) el.classList.add('chosen');
-  }
-  if(submitted && results[n]===false) clearQFeedback(n);
-  updateProg();
-}
+function checkAnswer(n){var q=BANK[lv][n-1],ua=chosen[n];if(q.t==='mc')return String(ua).toLowerCase()===q.a;if(q.t==='fill'){var cl=String(ua).trim().toLowerCase().replace(/[?.!,]+$/,'');return cl===q.a.toLowerCase().replace(/[?.!,]+$/,'');}if(q.t==='dd'){for(var z=0;z<q.zones.length;z++){var ex=q.zones[z].answer.map(function(s){return s.toLowerCase();}).sort();var go=(ua[z]||[]).map(function(s){return s.toLowerCase();}).sort();if(ex.join('|')!==go.join('|'))return false;}return true;}if(q.t==='match'){for(var m=0;m<q.pairs.length;m++){var e2=q.pairs[m].a.toLowerCase().trim();var g2=String(ua[m]||'').toLowerCase().trim().replace(/[?.!,]+$/,'');if(g2!==e2)return false;}return true;}return false;}
 
-function pickFill(n){
-  if(submitted && results[n]===true) return;
-  var val=$('fi'+n).value;
-  if(val.trim()) chosen[n]=val; else delete chosen[n];
-  if(submitted && results[n]===false){
-    var fi=$('fi'+n);
-    fi.classList.remove('grn','red','chosen');
-    if(val.trim()) fi.classList.add('chosen');
-    clearQFeedback(n);
-  }
-  updateProg();
-}
+function submitAnswers(){var qs=BANK[lv],cor=0,wr=[];submitted=true;for(var i=1;i<=TOTAL;i++){if(results[i]===true){cor++;continue;}var ok=checkAnswer(i);results[i]=ok;if(ok)cor++;else wr.push(i);}applyVisuals();if(wr.length===0){if(lv==='hard'){unlocked.bonus=true;unlockBtn('bonus');setTimeout(function(){startFW();setTimeout(function(){stopFW();$('trophy').classList.add('on');},4200);},400);}else{unlocked.hard=true;unlockBtn('hard');showModal(true,cor);}}else{$('subbtn').disabled=true;$('subhint').textContent=wr.length+' wrong – correct them and resubmit';}}
 
-function pickMatch(n){
-  if(submitted && results[n]===true) return;
-  var q=BANK[lv][n-1];
-  var allFilled=true;
-  var vals={};
-  for(var m=0;m<q.pairs.length;m++){
-    var fi=$('mi'+n+'_'+m);
-    if(fi.value.trim()){
-      vals[m]=fi.value;
-    } else {
-      allFilled=false;
-    }
-  }
-  if(allFilled) chosen[n]=vals; else delete chosen[n];
-  if(submitted && results[n]===false){
-    for(var m2=0;m2<q.pairs.length;m2++){
-      var fi2=$('mi'+n+'_'+m2);
-      fi2.classList.remove('grn','red','chosen');
-      if(fi2.value.trim()) fi2.classList.add('chosen');
-    }
-    clearQFeedback(n);
-  }
-  updateProg();
-}
+function applyVisuals(){var qs=BANK[lv];for(var i=1;i<=TOTAL;i++){var n=i,q=qs[i-1],card=$('qc'+n),fb=$('fb'+n),ico=$('qico'+n);if(results[n]===true){card.classList.remove('bad','shk');card.classList.add('ok');ico.textContent='✅';fb.className='fb ok';fb.textContent='✅ Correct! Well done!';disableQ(n,q);}else if(results[n]===false){card.classList.remove('ok','shk');void card.offsetHeight;card.classList.add('bad','shk');ico.textContent='❌';fb.className='fb bad';fb.textContent='❌ Not correct – try again!';markWrong(n,q);}}updateProg();}
 
-function updateProg(){
-  var count=0;
-  if(!submitted){
-    count=Object.keys(chosen).length;
-  } else {
-    for(var i=1;i<=TOTAL;i++){
-      if(results[i]===true) count++;
-      else if(chosen[i]!==undefined) count++;
-    }
-  }
-  $('pgbar').style.width=(count/TOTAL*100)+'%';
-  $('pgnum').textContent=count+' / '+TOTAL;
-  var all=(count===TOTAL);
-  $('subbtn').disabled=!all;
-  $('subhint').textContent=all
-    ?'Ready! Tap Submit to check your answers'
-    :'Answer all '+TOTAL+' questions first';
-}
+function disableQ(n,q){if(q.t==='mc'){for(var j=0;j<q.o.length;j++){var el=$('ob'+n+'_'+LL[j]);if(!el)continue;el.classList.remove('chosen','red');if(LL[j]===q.a)el.classList.add('grn');el.disabled=true;}}else if(q.t==='fill'){var fi=$('fi'+n);fi.classList.remove('red','chosen');fi.classList.add('grn');fi.disabled=true;}else if(q.t==='dd'){for(var z=0;z<q.zones.length;z++){var ze=$('dz'+n+'_'+z);ze.classList.add('grn');ze.querySelectorAll('.dd-chip.in-zone').forEach(function(c){c.classList.add('grn');c.style.pointerEvents='none';});}var bk=$('db'+n);if(bk)bk.querySelectorAll('.dd-chip').forEach(function(c){c.style.pointerEvents='none';});}else if(q.t==='match'){for(var m=0;m<q.pairs.length;m++){var fi2=$('mi'+n+'_'+m);fi2.classList.remove('red','chosen');fi2.classList.add('grn');fi2.disabled=true;}}}
 
-/* ===== CHECKING ANSWERS ===== */
-function checkAnswer(n){
-  var q=BANK[lv][n-1];
-  var ua=chosen[n];
+function markWrong(n,q){if(q.t==='mc'){for(var j=0;j<q.o.length;j++){var el=$('ob'+n+'_'+LL[j]);if(!el)continue;el.disabled=false;if(LL[j]===chosen[n])el.classList.add('red');else el.classList.remove('chosen','grn','red');}delete chosen[n];}else if(q.t==='fill'){var fi=$('fi'+n);fi.disabled=false;fi.classList.remove('grn','chosen');fi.classList.add('red');fi.value='';delete chosen[n];}else if(q.t==='dd'){for(var z=0;z<q.zones.length;z++){var ze=$('dz'+n+'_'+z);ze.classList.add('red');setTimeout((function(ze2,n2){return function(){ze2.classList.remove('red');ze2.querySelectorAll('.dd-chip.in-zone').forEach(function(tag){var src=document.getElementById(tag.dataset.srcId);if(src){src.classList.remove('placed');src.style.opacity='';}ze2.removeChild(tag);});updateDDC(n2);updateProg();};})(ze,n),900);}delete chosen[n];}else if(q.t==='match'){for(var m=0;m<q.pairs.length;m++){var fi2=$('mi'+n+'_'+m);fi2.disabled=false;fi2.classList.remove('grn','chosen');fi2.classList.add('red');fi2.value='';}delete chosen[n];}}
 
-  if(q.t==='mc'){
-    return String(ua).toLowerCase()===q.a;
-  }
-  if(q.t==='fill'){
-    // Remove trailing punctuation, trim, case-insensitive
-    var clean=String(ua).trim().toLowerCase().replace(/[?.!,]+$/,'');
-    var expected=q.a.toLowerCase().replace(/[?.!,]+$/,'');
-    return clean===expected;
-  }
-  if(q.t==='dd'){
-    // ua = {zoneIndex: [val,...], ...}
-    for(var z=0;z<q.zones.length;z++){
-      var expected2=q.zones[z].answer.map(function(s){return s.toLowerCase();}).sort();
-      var got=(ua[z]||[]).map(function(s){return s.toLowerCase();}).sort();
-      if(expected2.join('|')!==got.join('|')) return false;
-    }
-    return true;
-  }
-  if(q.t==='match'){
-    for(var m=0;m<q.pairs.length;m++){
-      var exp=q.pairs[m].a.toLowerCase().trim();
-      var got2=String(ua[m]||'').toLowerCase().trim().replace(/[?.!,]+$/,'');
-      if(got2!==exp) return false;
-    }
-    return true;
-  }
-  return false;
-}
-
-function submitAnswers(){
-  var qs=BANK[lv],correct=0,wrong=[];
-  submitted=true;
-  for(var i=1;i<=TOTAL;i++){
-    if(results[i]===true){ correct++; continue; }
-    var ok=checkAnswer(i);
-    results[i]=ok;
-    if(ok) correct++; else wrong.push(i);
-  }
-  applyVisuals();
-  if(wrong.length===0){
-    if(lv==='hard'){
-      setTimeout(function(){
-        startFW();
-        setTimeout(function(){ stopFW(); $('trophy').classList.add('on'); },4200);
-      },400);
-    } else {
-      unlocked.hard=true;
-      unlockBtn('hard');
-      showModal(true,correct);
-    }
-  } else {
-    $('subbtn').disabled=true;
-    $('subhint').textContent=wrong.length+' wrong – correct them and resubmit';
-  }
-}
-
-function applyVisuals(){
-  var qs=BANK[lv];
-  for(var i=1;i<=TOTAL;i++){
-    var n=i,q=qs[i-1];
-    var card=$('qc'+n),fb=$('fb'+n),ico=$('qico'+n);
-
-    if(results[n]===true){
-      card.classList.remove('bad','shk'); card.classList.add('ok');
-      ico.textContent='✅';
-      fb.className='fb ok'; fb.textContent='✅ Correct! Well done!';
-      disableQ(n,q,true);
-    } else if(results[n]===false){
-      card.classList.remove('ok','shk');
-      void card.offsetHeight;
-      card.classList.add('bad','shk');
-      ico.textContent='❌';
-      fb.className='fb bad'; fb.textContent='❌ Not correct – try again!';
-      markWrong(n,q);
-    }
-  }
-  updateProg();
-}
-
-function disableQ(n,q,correct){
-  if(q.t==='mc'){
-    for(var j=0;j<q.o.length;j++){
-      var el=$('ob'+n+'_'+LL[j]);
-      if(!el) continue;
-      el.classList.remove('chosen','red');
-      if(LL[j]===q.a) el.classList.add('grn');
-      el.disabled=true;
-    }
-  } else if(q.t==='fill'){
-    var fi=$('fi'+n);
-    fi.classList.remove('red','chosen'); fi.classList.add('grn'); fi.disabled=true;
-  } else if(q.t==='dd'){
-    for(var z=0;z<q.zones.length;z++){
-      var ze=$('dz'+n+'_'+z);
-      ze.classList.add('grn');
-      ze.querySelectorAll('.dd-chip.in-zone').forEach(function(c){c.classList.add('grn');c.style.pointerEvents='none';});
-    }
-    // Disable remaining bank chips
-    var bank=$('db'+n);
-    if(bank) bank.querySelectorAll('.dd-chip').forEach(function(c){c.style.pointerEvents='none';});
-  } else if(q.t==='match'){
-    for(var m=0;m<q.pairs.length;m++){
-      var fi2=$('mi'+n+'_'+m);
-      fi2.classList.remove('red','chosen'); fi2.classList.add('grn'); fi2.disabled=true;
-    }
-  }
-}
-
-function markWrong(n,q){
-  if(q.t==='mc'){
-    for(var j=0;j<q.o.length;j++){
-      var el=$('ob'+n+'_'+LL[j]);
-      if(!el) continue;
-      el.disabled=false;
-      if(LL[j]===chosen[n]) el.classList.add('red');
-      else el.classList.remove('chosen','grn','red');
-    }
-    delete chosen[n];
-  } else if(q.t==='fill'){
-    var fi=$('fi'+n);
-    fi.disabled=false;
-    fi.classList.remove('grn','chosen'); fi.classList.add('red');
-    fi.value=''; delete chosen[n];
-  } else if(q.t==='dd'){
-    // Mark zones red, reset chips back to bank
-    for(var z=0;z<q.zones.length;z++){
-      var ze=$('dz'+n+'_'+z);
-      ze.classList.add('red');
-      setTimeout((function(ze2,n2){return function(){
-        ze2.classList.remove('red');
-        // Remove chips from zone, return to bank
-        var inZone=ze2.querySelectorAll('.dd-chip.in-zone');
-        inZone.forEach(function(tag){
-          var srcId=tag.dataset.srcId;
-          var src=document.getElementById(srcId);
-          if(src){src.classList.remove('placed');src.style.opacity='';}
-          ze2.removeChild(tag);
-        });
-        updateDDChosen(n2);
-        updateProg();
-      };})(ze,n),900);
-    }
-    delete chosen[n];
-  } else if(q.t==='match'){
-    for(var m=0;m<q.pairs.length;m++){
-      var fi2=$('mi'+n+'_'+m);
-      fi2.disabled=false;
-      fi2.classList.remove('grn','chosen'); fi2.classList.add('red');
-      fi2.value='';
-    }
-    delete chosen[n];
-  }
-}
-
-function showModal(perfect,score){
-  $('me').textContent=perfect?'🌟':'😅';
-  $('mt').textContent=perfect?'Level Complete!':'Not quite…';
-  $('ms').textContent=score+' / '+TOTAL;
-  if(perfect){
-    $('mm').textContent='🎉 Perfect! You unlocked Hard 💎 Mode!';
-    $('mbtn').textContent='Start Hard 💎';
-    $('mbtn').className='mbtn gn';
-  } else {
-    $('mm').textContent='You need '+TOTAL+'/'+TOTAL+' to unlock the next level. Try again!';
-    $('mbtn').textContent='🔄 Try Again';
-    $('mbtn').className='mbtn pu';
-  }
-  $('modal').style.display='flex';
-}
-
-function closeModal(){
-  $('modal').style.display='none';
-  var allOk=true;
-  for(var k in results){ if(results[k]!==true){ allOk=false; break; } }
-  if(allOk){
-    if(lv==='easy') tryLevel('hard');
-  } else {
-    tryLevel(lv);
-  }
-}
-
-function unlockBtn(l){
-  var btn=$('btn-'+l);
-  btn.classList.remove('locked');
-  var lk=$('lk-'+l);
-  if(lk) lk.parentNode.removeChild(lk);
-}
+function showModal(p,s){$('me').textContent=p?'🌟':'😅';$('mt').textContent=p?'Level Complete!':'Not quite…';$('ms').textContent=s+' / '+TOTAL;if(p){$('mm').textContent='🎉 Perfect! You unlocked Hard 💎 Mode!';$('mbtn').textContent='Start Hard 💎';$('mbtn').className='mbtn gn';}else{$('mm').textContent='You need '+TOTAL+'/'+TOTAL+' to unlock the next level.';$('mbtn').textContent='🔄 Try Again';$('mbtn').className='mbtn pu';}$('modal').style.display='flex';}
+function closeModal(){$('modal').style.display='none';var ok=true;for(var k in results)if(results[k]!==true){ok=false;break;}if(ok&&lv==='easy')tryLevel('hard');else tryLevel(lv);}
+function unlockBtn(l){var b=$('btn-'+l);b.classList.remove('locked');var lk=$('lk-'+l);if(lk)lk.parentNode.removeChild(lk);}
 
 function resetAll(){
-  $('trophy').classList.remove('on');
-  unlocked={easy:true,hard:false};
-  var btn=$('btn-hard');
-  btn.classList.add('locked'); btn.classList.remove('sel');
-  if(!$('lk-hard')){
-    var s=document.createElement('span');
-    s.className='lk'; s.id='lk-hard'; s.textContent='🔒';
-    btn.insertBefore(s,btn.firstChild);
+  $('trophy').classList.remove('on');$('memorySection').style.display='none';$('memResult').classList.remove('on');stopMemTimer();
+  unlocked={easy:true,hard:false,bonus:false};
+  ['hard','bonus'].forEach(function(l){var b=$('btn-'+l);b.classList.add('locked');b.classList.remove('sel');if(!$('lk-'+l)){var s=document.createElement('span');s.className='lk';s.id='lk-'+l;s.textContent='🔒';b.insertBefore(s,b.firstChild);}});
+  $('btn-easy').classList.remove('sel');$('main').style.display='none';
+  lv=null;chosen={};results={};submitted=false;window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ===== MEMORY GAME ===== */
+var memCards=[],memFlipped=[],memMatched=0,memMoves=0,memTimer=null,memSeconds=0,memLocked=false,memTP=8;
+
+function startMemory(){
+  $('main').style.display='none';$('memorySection').style.display='block';$('memResult').classList.remove('on');$('memGrid').style.display='grid';
+  memMatched=0;memMoves=0;memSeconds=0;memFlipped=[];memLocked=false;
+  $('mem-moves').textContent='0';$('mem-pairs').textContent='0 / '+memTP;$('mem-time').textContent='0:00';stopMemTimer();
+  var picked=shuffle(MEM_PAIRS).slice(0,memTP);
+  memCards=[];
+  for(var i=0;i<picked.length;i++){memCards.push({text:picked[i].en,lang:'EN',pid:i});memCards.push({text:picked[i].de,lang:'DE',pid:i});}
+  memCards=shuffle(memCards);
+  var g=$('memGrid');g.innerHTML='';
+  for(var c=0;c<memCards.length;c++){
+    var cd=document.createElement('div');cd.className='mem-card';cd.dataset.idx=c;
+    cd.innerHTML='<div class="mem-card-inner"><div class="mem-front">🛒</div><div class="mem-back"><span class="lang-tag">'+memCards[c].lang+'</span>'+esc(memCards[c].text)+'</div></div>';
+    g.appendChild(cd);
+    (function(el,idx){tapify(el,function(){flipCard(idx);});})(cd,c);
   }
-  $('btn-easy').classList.remove('sel');
-  $('main').style.display='none';
-  lv=null; chosen={}; results={}; submitted=false;
-  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(function(){$('memorySection').scrollIntoView({behavior:'smooth',block:'start'});},100);
+}
+
+function flipCard(idx){
+  if(memLocked)return;
+  var el=$('memGrid').children[idx];
+  if(!el||el.classList.contains('flipped')||el.classList.contains('matched'))return;
+  if(memMoves===0&&memFlipped.length===0)startMemTimer();
+  el.classList.add('flipped');memFlipped.push(idx);
+  if(memFlipped.length===2){
+    memMoves++;$('mem-moves').textContent=memMoves;
+    var i1=memFlipped[0],i2=memFlipped[1],c1=memCards[i1],c2=memCards[i2];
+    if(c1.pid===c2.pid&&c1.lang!==c2.lang){
+      memLocked=true;
+      setTimeout(function(){$('memGrid').children[i1].classList.add('matched');$('memGrid').children[i2].classList.add('matched');memMatched++;$('mem-pairs').textContent=memMatched+' / '+memTP;memFlipped=[];memLocked=false;if(memMatched===memTP)finishMemory();},500);
+    } else {
+      memLocked=true;
+      setTimeout(function(){$('memGrid').children[i1].classList.remove('flipped');$('memGrid').children[i2].classList.remove('flipped');memFlipped=[];memLocked=false;},900);
+    }
+  }
+}
+
+function startMemTimer(){stopMemTimer();memSeconds=0;memTimer=setInterval(function(){memSeconds++;var m=Math.floor(memSeconds/60),s=memSeconds%60;$('mem-time').textContent=m+':'+(s<10?'0':'')+s;},1000);}
+function stopMemTimer(){if(memTimer){clearInterval(memTimer);memTimer=null;}}
+
+function finishMemory(){
+  stopMemTimer();
+  var timeP=Math.max(0,memSeconds-30)*3,moveP=Math.max(0,memMoves-memTP)*15;
+  var score=Math.max(100,1000-timeP-moveP);
+  var stars=score>=800?3:score>=500?2:1;
+  var starStr='';for(var i=0;i<3;i++)starStr+=(i<stars?'⭐':'☆')+' ';
+  var m=Math.floor(memSeconds/60),s=memSeconds%60,ts=m+':'+(s<10?'0':'')+s;
+  $('memGrid').style.display='none';
+  $('mrEmoji').textContent=['😅','🔥','🧠'][stars-1];
+  $('mrTitle').textContent=['Good Try!','Great Job!','Memory Master!'][stars-1];
+  $('mrStars').textContent=starStr;$('mrScore').textContent=score;
+  $('mrDetails').innerHTML='⏱ Time: <strong>'+ts+'</strong><br>👆 Moves: <strong>'+memMoves+'</strong><br>🃏 Pairs: <strong>'+memTP+'</strong>';
+  $('soScore').textContent=score;$('soStars').textContent=starStr;$('soDetail').innerHTML='⏱ '+ts+' · 👆 '+memMoves+' moves';
+  $('memResult').classList.add('on');
+  if(stars===3){startFW();setTimeout(stopFW,3500);}
 }
 
 /* ===== FIREWORKS ===== */
 var cv=$('fwc'),cx=cv.getContext('2d'),fwP=[],fwR=null,fwT=null;
 function resizeFW(){cv.width=window.innerWidth;cv.height=window.innerHeight;}
-function burst(){
-  var bx=Math.random()*cv.width,by=Math.random()*cv.height*.5+40;
-  var hh=[0,30,55,120,180,240,270,300];
-  for(var i=0;i<50;i++){
-    var a=Math.random()*Math.PI*2,s=Math.random()*10+3;
-    fwP.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,
-      l:1,d:Math.random()*.018+.009,sz:Math.random()*5+2,
-      c:'hsl('+hh[~~(Math.random()*hh.length)]+',100%,62%)',r:Math.random()<.5,g:.17});
-  }
-}
-function startFW(){
-  resizeFW(); cv.style.display='block'; fwP=[];
-  burst(); burst(); fwT=setInterval(burst,300);
-  var loop=function(){
-    cx.fillStyle='rgba(0,0,0,.18)'; cx.fillRect(0,0,cv.width,cv.height);
-    fwP=fwP.filter(function(p){
-      p.vx*=.99; p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.l-=p.d;
-      if(p.l<=0) return false;
-      cx.save(); cx.globalAlpha=Math.max(0,p.l); cx.fillStyle=p.c;
-      if(p.r){cx.translate(p.x,p.y);cx.rotate(p.l*8);cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);}
-      else{cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fill();}
-      cx.restore(); return true;
-    });
-    fwR=requestAnimationFrame(loop);
-  };
-  loop();
-}
-function stopFW(){
-  clearInterval(fwT); cancelAnimationFrame(fwR);
-  cv.style.display='none'; cx.clearRect(0,0,cv.width,cv.height); fwP=[];
-}
+function burst(){var bx=Math.random()*cv.width,by=Math.random()*cv.height*.5+40;var hh=[0,30,55,120,180,240,270,300];for(var i=0;i<50;i++){var a=Math.random()*Math.PI*2,s=Math.random()*10+3;fwP.push({x:bx,y:by,vx:Math.cos(a)*s,vy:Math.sin(a)*s-3,l:1,d:Math.random()*.018+.009,sz:Math.random()*5+2,c:'hsl('+hh[~~(Math.random()*hh.length)]+',100%,62%)',r:Math.random()<.5,g:.17});}}
+function startFW(){resizeFW();cv.style.display='block';fwP=[];burst();burst();fwT=setInterval(burst,300);var loop=function(){cx.fillStyle='rgba(0,0,0,.18)';cx.fillRect(0,0,cv.width,cv.height);fwP=fwP.filter(function(p){p.vx*=.99;p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.l-=p.d;if(p.l<=0)return false;cx.save();cx.globalAlpha=Math.max(0,p.l);cx.fillStyle=p.c;if(p.r){cx.translate(p.x,p.y);cx.rotate(p.l*8);cx.fillRect(-p.sz/2,-p.sz/2,p.sz,p.sz);}else{cx.beginPath();cx.arc(p.x,p.y,p.sz,0,Math.PI*2);cx.fill();}cx.restore();return true;});fwR=requestAnimationFrame(loop);};loop();}
+function stopFW(){clearInterval(fwT);cancelAnimationFrame(fwR);cv.style.display='none';cx.clearRect(0,0,cv.width,cv.height);fwP=[];}
 window.addEventListener('resize',resizeFW);
 
-/* ===== WIRE UP BUTTONS ===== */
-document.addEventListener('DOMContentLoaded', function(){
-  ['easy','hard'].forEach(function(l){
-    tapify($('btn-'+l),function(){ tryLevel(l); });
+/* ===== WIRE UP ===== */
+document.addEventListener('DOMContentLoaded',function(){
+  ['easy','hard','bonus'].forEach(function(l){tapify($('btn-'+l),function(){tryLevel(l);});});
+  tapify($('subbtn'),function(){if(!$('subbtn').disabled)submitAnswers();});
+  tapify($('mbtn'),function(){closeModal();});
+  tapify($('btn-reset'),function(){resetAll();});
+  tapify($('btn-start-memory'),function(){$('trophy').classList.remove('on');tryLevel('bonus');});
+  tapify($('mrRetry'),function(){startMemory();});
+  tapify($('mrBack'),function(){$('memorySection').style.display='none';stopMemTimer();document.querySelectorAll('.lv-btn').forEach(function(b){b.classList.remove('sel');});window.scrollTo({top:0,behavior:'smooth'});});
+
+  // Cheat code: 0000 unlocks all levels
+  var ci=$('cheatInput');
+  ci.addEventListener('input',function(){
+    if(ci.value==='0000'){
+      unlocked.hard=true;unlocked.bonus=true;
+      unlockBtn('hard');unlockBtn('bonus');
+      ci.value='';ci.blur();ci.style.borderColor='var(--og)';ci.placeholder='✅ Unlocked!';
+      setTimeout(function(){ci.style.borderColor='#e5e0ff';ci.placeholder='🔑 Code';},2000);
+    }
   });
-  tapify($('subbtn'),function(){ if(!$('subbtn').disabled) submitAnswers(); });
-  tapify($('mbtn'),function(){ closeModal(); });
-  tapify($('btn-reset'),function(){ resetAll(); });
 });
 </script>
 </body>
