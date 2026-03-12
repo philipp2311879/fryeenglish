@@ -151,6 +151,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-se
   transition:all .15s;touch-action:none;}
 .dd-chip:active{cursor:grabbing;transform:scale(1.06);box-shadow:0 4px 14px rgba(0,0,0,.15);}
 .dd-chip.placed{opacity:.35;cursor:default;pointer-events:none;}
+.dd-chip.dd-selected{background:#1e8449;color:#fff;border-color:#1e8449;
+  box-shadow:0 0 0 3px rgba(30,132,73,.25);transform:scale(1.06);}
 .dd-chip.in-zone{background:#fff;border-color:#1e8449;color:#1e8449;cursor:pointer;}
 .dd-chip.in-zone.grn{background:#dcfce7!important;border-color:var(--og)!important;color:#15803d!important;}
 .dd-chip.in-zone.red{background:#ffe4e6!important;border-color:var(--rd)!important;color:#be123c!important;}
@@ -516,6 +518,7 @@ function buildQs(qs){
              +esc(shuffled[c2])+'</span>';
       }
       body+='</div>';
+      body+='<div style="font-size:.65rem;color:#aaa;font-weight:600;text-align:center;margin-top:4px;">Tap a word, then tap a category · or drag &amp; drop</div>';
     }
     else if(q.t==='match'){
       body='';
@@ -611,14 +614,20 @@ function setupDD(){
     });
   });
 
-  // Mobile touch – only start drag after finger moves > threshold (so scroll still works)
-  var touchChip=null,touchClone=null,touchStartX=0,touchStartY=0,dragActive=false;
+  // Mobile: tap-to-select chip, then tap zone to place.
+  // Also supports drag if finger moves enough.
+  var selectedChip=null;
+  var touchChip=null,touchClone=null,touchStartX=0,touchStartY=0,dragActive=false,wasScroll=false;
   var DD_DRAG_THRESH=14;
+
+  function deselectChip(){
+    if(selectedChip){selectedChip.classList.remove('dd-selected');selectedChip=null;}
+  }
+
   chips.forEach(function(chip){
     chip.addEventListener('touchstart',function(e){
       if(chip.classList.contains('placed')) return;
-      // Don't preventDefault yet — allow scroll to start
-      touchChip=chip; dragActive=false; touchClone=null;
+      touchChip=chip; dragActive=false; wasScroll=false; touchClone=null;
       var t=e.touches[0];
       touchStartX=t.clientX; touchStartY=t.clientY;
     },{passive:true});
@@ -628,11 +637,12 @@ function setupDD(){
       var t=e.touches[0];
       var dx=Math.abs(t.clientX-touchStartX), dy=Math.abs(t.clientY-touchStartY);
       if(!dragActive){
-        // If mostly vertical, let the browser scroll
-        if(dy>DD_DRAG_THRESH && dy>dx){ touchChip=null; return; }
-        // If enough horizontal movement, start drag
+        // Vertical scroll – let browser handle it
+        if(dy>DD_DRAG_THRESH && dy>dx){ wasScroll=true; touchChip=null; return; }
+        // Horizontal/diagonal drag – start chip drag
         if(dx>DD_DRAG_THRESH || (dx+dy)>DD_DRAG_THRESH*1.5){
           dragActive=true;
+          deselectChip();
           touchClone=chip.cloneNode(true);
           touchClone.style.position='fixed';
           touchClone.style.zIndex='9999';
@@ -651,8 +661,10 @@ function setupDD(){
     },{passive:false});
 
     chip.addEventListener('touchend',function(e){
+      if(wasScroll){touchChip=null;wasScroll=false;return;}
       if(!touchChip) return;
       if(dragActive && touchClone){
+        // Finish drag
         e.preventDefault();
         document.body.removeChild(touchClone);
         touchChip.style.opacity='';
@@ -662,8 +674,34 @@ function setupDD(){
         if(zone && !touchChip.classList.contains('placed')){
           placeChipInZone(touchChip,zone);
         }
+      } else {
+        // Short tap – select/deselect chip
+        e.preventDefault();
+        if(selectedChip===chip){
+          deselectChip();
+        } else {
+          deselectChip();
+          selectedChip=chip;
+          chip.classList.add('dd-selected');
+        }
       }
       touchChip=null; touchClone=null; dragActive=false;
+    },{passive:false});
+  });
+
+  // Tap on zone → place selected chip there
+  zones.forEach(function(zone){
+    zone.addEventListener('touchstart',function(e){
+      zone._tsy=e.touches[0].clientY;
+    },{passive:true});
+    zone.addEventListener('touchend',function(e){
+      var dy=Math.abs(e.changedTouches[0].clientY-(zone._tsy||0));
+      if(dy>SCROLL_THRESH) return; // was a scroll
+      if(selectedChip && !selectedChip.classList.contains('placed')){
+        e.preventDefault();
+        placeChipInZone(selectedChip,zone);
+        deselectChip();
+      }
     },{passive:false});
   });
 }
